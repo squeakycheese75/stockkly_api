@@ -7,7 +7,7 @@ import datetime
 
 from stockklyApi.api import auth
 from stockklyApi.database.db import get_db
-from stockklyApi.api.wallet.business import get_transaction_history_for_user_and_product
+from stockklyApi.api.wallet.business.transactions import get_transaction_history_for_user_and_product
 from stockklyApi.api.wallet.serializers import transaction
 
 from stockklyApi.api.restplus import api
@@ -15,8 +15,6 @@ from stockklyApi.api.restplus import api
 log = logging.getLogger(__name__)
 
 ns = api.namespace('wallet/transactions', description='Operations related to wallet Transactions')
-
-# transactions = Blueprint('transactions', __name__)
 
 
 @cross_origin(headers=['Content-Type', 'Authorization'], origin='*', allow_headers='*')

@@ -37,7 +37,8 @@ holding = api.model('Holding', {
     'qty':  fields.Float,
     'total': fields.Float,
     'spot': fields.Float,
-    'ccy': fields.String
+    'ccy': fields.String,
+    'symbol': fields.String,
 })
 
 
@@ -60,7 +61,9 @@ transaction = api.model('Transaction', {
     'owner': fields.String,
     'ticker': fields.String,
     'transdate': fields.DateTime,
-    'transtype': fields.String
+    'transtype': fields.String,
+    'quantity': fields.Float,
+    'price': fields.Float,
     #             'transdate': request_data['transdate'],
     #             'transtype': request_data['transtype'],
     #             'quantity': request_data['quantity'],

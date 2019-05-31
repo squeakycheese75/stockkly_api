@@ -14,13 +14,8 @@
         "FLASK_ENV": "development",
         "FLASK_DEBUG": "1"
       },
-      "args": [
-        "run",
-        "--no-debugger",
-        "--no-reload",
-        "--host=0.0.0.0",
-        "--port=8888"
-      ],
+      // "args": ["run", "--host=0.0.0.0", "--port=5000"],
+      "args": ["run", "--no-debugger", "--no-reload"],
       "jinja": true
     }
   ]

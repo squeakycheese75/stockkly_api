@@ -1,12 +1,14 @@
 import logging
-
+from flask_cors import cross_origin
 from flask import request
 from flask_restplus import Resource
-from stockklyApi.api.wallet.business import get_holdings
+# from stockklyApi.api.wallet.business import get_holdings
+from stockklyApi.api.wallet.business.holdings import get_holdings
 # create_category, delete_category, update_category
 from stockklyApi.api.wallet.serializers import holding
 # , category_with_posts
 from stockklyApi.api.restplus import api
+from stockklyApi.api import auth
 # from rest_api_demo.database.models import Category
 
 log = logging.getLogger(__name__)
@@ -15,13 +17,20 @@ ns = api.namespace('wallet/holdings', description='Operations related to wallet 
 
 
 @ns.route('/')
+# @cross_origin(headers=['Content-Type', 'Authorization'], origin='*', allow_headers='*')
 class HoldingsCollection(Resource):
     @api.marshal_list_with(holding)
+    # @cross_origin(headers=['Content-Type', 'Authorization'], origin='*', allow_headers='*')
+    @auth.requires_auth
     def get(self):
         """
         Returns list of blog categories.
         """
-        response = get_holdings()
+        # userEmail = 'james_wooltorton@hotmail.com'
+        userInfo = auth.get_userinfo_with_token()
+        userEmail = userInfo['email']
+
+        response = get_holdings(userEmail)
         return response, 200
 
     # @api.response(201, 'Category successfully created.')

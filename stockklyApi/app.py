@@ -1,5 +1,6 @@
 from flask import Flask, Blueprint
 from flask_restplus import Resource, Api
+from flask_cors import CORS
 
 import os
 import logging.config
@@ -14,6 +15,9 @@ app = Flask(__name__)
 logging_conf_path = os.path.normpath(os.path.join(os.path.dirname(__file__), '../logging.conf'))
 logging.config.fileConfig(logging_conf_path)
 log = logging.getLogger(__name__)
+
+# CORS(app, expose_headers='Authorization', supports_credentials=True)
+CORS(app)
 # api = Api(app)  # Create a Flask-RESTPlus API
 
 
@@ -46,12 +50,14 @@ def initialize_app(flask_app):
 #     # log.info(
 #     #     '>>>>> Starting development server at http://{}:5000/api/ <<<<<'.format(settings.FLASK_HOST))
 #     app.run(host=settings.FLASK_HOST, port=settings.FLASK_PORT, debug=settings.FLASK_DEBUG)
+
 def main():
     initialize_app(app)
     log.info(
         '>>>>> Starting development server at http://{}:5000/api/ <<<<<'.format(settings.FLASK_HOST))
-    app.run(debug=settings.FLASK_DEBUG)
+    # app.run(debug=settings.FLASK_DEBUG)
+    # app.run(host=settings.FLASK_HOST, port=settings.FLASK_PORT, debug=settings.FLASK_DEBUG)
 
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+main()
