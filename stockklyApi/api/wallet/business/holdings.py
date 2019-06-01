@@ -35,7 +35,6 @@ def get_holdings(userId):
     queryresult = holdings_collection.find({"owner": userId})
 
     # json_results = json_util.dumps(queryresult)
-    # print(queryresult.count())
     if queryresult.count() == 0:
         # if json_results is None:
         json_results = [{
@@ -48,7 +47,7 @@ def get_holdings(userId):
 
     # enrich with latest price
     for i in json_results:
-        # print(i)
+        # enrich_price()
         price = prices.get(i['ticker'])
         # enrich
         change = calc_change(price['price'], price['open'])
@@ -58,11 +57,13 @@ def get_holdings(userId):
         i['total_change'] = calc_total_change(i['qty'], change)
         i['total'] = calc_total(i['qty'], price['price'])
 
-        product = product.get(i['ticker'])
+        # product = product.get(i['ticker'])
         # Might do once at ui level...
-        # i['spot'] = 1.2922
+        i['spot'] = 1.2922
         i['ccy'] = "USD"
         i['symbol'] = "$"
+
+        i['name'] = 'Microsoft Ltd'
     # print(json_results)
     # enrich with asses data
 

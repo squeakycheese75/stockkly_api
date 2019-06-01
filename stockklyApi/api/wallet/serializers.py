@@ -39,6 +39,7 @@ holding = api.model('Holding', {
     'spot': fields.Float,
     'ccy': fields.String,
     'symbol': fields.String,
+    'total_change': fields.Float,
 })
 
 

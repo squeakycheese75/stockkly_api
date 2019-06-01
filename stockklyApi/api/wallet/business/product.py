@@ -16,7 +16,6 @@ def get(ticker):
             'ticker': ticker,
             'ccy': "USD",
             'symbol': "$"
-
         }
         return product
     # If new set-up an empty profile
