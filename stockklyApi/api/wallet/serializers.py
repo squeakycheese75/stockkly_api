@@ -43,17 +43,10 @@ holding = api.model('Holding', {
 })
 
 
-#   {
-#     "_id": {
-#       "$oid": "5ce5bb60c3452a575afdce17"
-#     },
-#     "owner": "james_wooltorton@hotmail.com",
-#     "ticker": "MSFT",
-#     "transdate": "2019-05-22T21:12:00.444Z",
-#     "transtype": "BUY",
-#     "quantity": 1,
-#     "price": 1
-#   },
+balance = api.model('Balance', {
+    'ticker': fields.String,
+    'qty': fields.Float,
+})
 
 transaction = api.model('Transaction', {
     # 'id': fields.Integer(readOnly=True, description='The unique identifier of a blog category'),

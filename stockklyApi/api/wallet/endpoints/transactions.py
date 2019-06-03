@@ -7,7 +7,7 @@ import datetime
 
 from stockklyApi.api import auth
 from stockklyApi.database.db import get_db
-from stockklyApi.api.wallet.business.transactions import get_transaction_history_for_user_and_product
+from stockklyApi.api.wallet.business.transactions import get_transaction_history_for_user_and_product, get_transaction_history_for_user
 from stockklyApi.api.wallet.serializers import transaction
 
 from stockklyApi.api.restplus import api
@@ -17,70 +17,82 @@ log = logging.getLogger(__name__)
 ns = api.namespace('wallet/transactions', description='Operations related to wallet Transactions')
 
 
-@cross_origin(headers=['Content-Type', 'Authorization'], origin='*', allow_headers='*')
+# @cross_origin(headers=['Content-Type', 'Authorization'], origin='*', allow_headers='*')
 # @auth.requires_auth
 @ns.route('/')
-class TransactionsCollection(Resource):
+class TransactionCollection(Resource):
+    @auth.requires_auth
     @api.marshal_list_with(transaction)
     def get(self):
         """
-        Returns list of blog categories.
+        Returns list of all transactions for an authenticated user.
         """
         # Get email from AccessToken
-        # userInfo = auth.get_userinfo_with_token()
-        # userEmail = userInfo['email']
+        userInfo = auth.get_userinfo_with_token()
+        userEmail = userInfo['email']
 
-        userEmail = 'james_wooltorton@hotmail.com'
-        ticker = 'MSFT'
-        response = get_transaction_history_for_user_and_product(userEmail, ticker)
+        # userEmail = 'james_wooltorton@hotmail.com'
+        # ticker = 'MSFT'
+        # response = get_transaction_history_for_user_and_product(userEmail, ticker)
+        response = get_transaction_history_for_user(userEmail)
         #  I know but if i don't  do this it runs through dumps twice
         resval = json.loads(response)
         return resval, 200
 
-
-# @ns.route("/<ticker>", methods=['GET',  'OPTIONS'])
-# @cross_origin(headers=['Content-Type', 'Authorization'], origin='*', allow_headers='*')
-# @auth.requires_auth
-# def private_transactions_load(ticker):
-
-
-# def get(self):
-#     try:
-#         # Get email from AccessToken
-#         userInfo = auth.get_userinfo_with_token()
-#         userEmail = userInfo['email']
-
-#         trans = get_transaction_history_for_user_and_product(userEmail, ticker)
-
-#         return jsonify(message=trans), 200
-#     except:
-#         return jsonify(message="Error loading user transactions."), 500
+    @api.response(201, 'Category successfully created.')
+    @api.expect(transaction)
+    def post(self):
+        """
+        Creates a new blog category.
+        """
+        data = request.json
+        # create_transacion(data)
+        return None, 201
 
 
-# @ns.route("", methods=['POST'])
-# @cross_origin(headers=['Content-Type', 'Authorization'], origin='*', allow_headers='*')
-# @auth.requires_auth
-# def insert_transaction():
-#     try:
-#         request_data = request.get_json()
-#         userEmail = auth.get_userinfo_with_token()['email']
+@ns.route('/<string:id>')
+@api.response(404, 'Category not found.')
+class TransactionItem(Resource):
+    @auth.requires_auth
+    @api.marshal_list_with(transaction)
+    def get(self, id):
+        """
+        Returns list of products transactions for an authenticated user.
+        """
+        # Get email from AccessToken
+        userInfo = auth.get_userinfo_with_token()
+        userEmail = userInfo['email']
 
-#         db = get_db()['stockkly']
-#         transactionsCollection = db['transactions']
+        response = get_transaction_history_for_user_and_product(userEmail, id)
+        #  I know but if i don't  do this it runs through dumps twice
+        resval = json.loads(response)
+        return resval, 200
 
-#         # handle empty lists
-#         trans = {
-#             "owner": userEmail,
-#             'ticker': request_data['ticker'],
-#             'transdate': request_data['transdate'],
-#             'transtype': request_data['transtype'],
-#             'quantity': request_data['quantity'],
-#             'price': request_data['price'],
-#             'details': request_data['details'],
-#         }
-#         resId = transactionsCollection.insert_one(trans)
-#         response = "Inserted transaction"
-#         return jsonify(response), 201
-#     except:
-#         response = "Error inserting transaction."
-#         jsonify(response), 500
+    @api.expect(transaction)
+    def put(self, id):
+        """
+        Updates a blog category.
+
+        Use this method to change the name of a blog category.
+
+        * Send a JSON object with the new name in the request body.
+
+        ```
+        {
+          "name": "New Category Name"
+        }
+        ```
+
+        * Specify the ID of the category to modify in the request URL path.
+        """
+        data = request.json
+        # update_transacion(id, data)
+        return None, 204
+
+    @api.response(204, 'Category successfully deleted.')
+    def delete(self, id):
+        """
+        Deletes blog category.
+        """
+        # delete_category(id)
+        return None, 204
