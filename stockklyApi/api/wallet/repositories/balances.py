@@ -2,8 +2,7 @@
 from stockklyApi.api import auth
 from stockklyApi.database.db import get_db
 
-from stockklyApi.api.wallet.business import prices
-from stockklyApi.api.wallet.business import product
+# from stockklyApi.api.wallet.business import prices
 
 from bson import json_util
 

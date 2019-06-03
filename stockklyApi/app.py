@@ -9,9 +9,10 @@ from stockklyApi.api.restplus import api
 
 from stockklyApi.api.wallet.endpoints.holdings import ns as wallet_holdings_namespace
 from stockklyApi.api.wallet.endpoints.transactions import ns as wallet_transactions_namespace
+from stockklyApi.api.wallet.endpoints.balances import ns as wallet_balances_namespace
 from stockklyApi.api.products.endpoints.info import ns as product_info_namespace
 from stockklyApi.api.products.endpoints.sectors import ns as product_sectors_namespace
-from stockklyApi.api.wallet.endpoints.balances import ns as wallet_balances_namespace
+
 
 app = Flask(__name__)
 logging_conf_path = os.path.normpath(os.path.join(os.path.dirname(__file__), '../logging.conf'))
@@ -23,10 +24,10 @@ CORS(app)
 # api = Api(app)  # Create a Flask-RESTPlus API
 
 
-@api.route('/hello')  # Create a URL route to this resource
-class HelloWorld(Resource):  # Create a RESTful resource
-    def get(self):  # Create GET endpoint
-        return {'hello': 'world'}
+# @api.route('/hello')  # Create a URL route to this resource
+# class HelloWorld(Resource):  # Create a RESTful resource
+#     def get(self):  # Create GET endpoint
+#         return {'hello': 'world'}
 
 
 def initialize_app(flask_app):
@@ -38,9 +39,9 @@ def initialize_app(flask_app):
     # app.register_blueprint(blueprint)
     api.add_namespace(wallet_holdings_namespace)
     api.add_namespace(wallet_transactions_namespace)
+    api.add_namespace(wallet_balances_namespace)
     api.add_namespace(product_info_namespace)
     api.add_namespace(product_sectors_namespace)
-    api.add_namespace(wallet_balances_namespace)
 
     # api.add_namespace(transactions_api)
     flask_app.register_blueprint(blueprint)

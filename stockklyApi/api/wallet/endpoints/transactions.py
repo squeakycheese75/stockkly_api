@@ -7,7 +7,7 @@ import datetime
 
 from stockklyApi.api import auth
 from stockklyApi.database.db import get_db
-from stockklyApi.api.wallet.business.transactions import get_transaction_history_for_user_and_product, get_transaction_history_for_user
+from stockklyApi.api.wallet.repositories.transactions import get_transaction_history_for_user_and_product, get_transaction_history_for_user
 from stockklyApi.api.wallet.serializers import transaction
 
 from stockklyApi.api.restplus import api

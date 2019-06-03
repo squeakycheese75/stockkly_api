@@ -2,7 +2,7 @@ import logging
 from flask_cors import cross_origin
 from flask import request
 from flask_restplus import Resource
-from stockklyApi.api.wallet.business.balances import create_balance, update_balance
+from stockklyApi.api.wallet.repositories.balances import create_balance, update_balance
 from stockklyApi.api.wallet.serializers import balance
 from stockklyApi.api.restplus import api
 from stockklyApi.api import auth
