@@ -10,7 +10,9 @@ from bson import json_util
 def get_balance(userId, ticker):
     db = get_db()['stockkly']
     holdingCollection = db['balances']
-    return holdingCollection.find({"userId": userId, "ticker": ticker})
+    queryresult = holdingCollection.find_one({"userId": userId, "ticker": ticker})
+    # json_results = json_util.dumps(queryresult)
+    return(queryresult)
 
 
 def get_balances(userId):

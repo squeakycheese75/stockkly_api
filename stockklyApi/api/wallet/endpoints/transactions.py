@@ -28,6 +28,7 @@ class TransactionCollection(Resource):
         Returns list of all transactions for an authenticated user.
         """
         # Get email from AccessToken
+        token = auth.get_Token()
         userInfo = auth.get_userinfo_with_token()
         userEmail = userInfo['email']
 
@@ -60,6 +61,7 @@ class TransactionItem(Resource):
         Returns list of products transactions for an authenticated user.
         """
         # Get email from AccessToken
+        token = auth.get_Token()
         userInfo = auth.get_userinfo_with_token()
         userEmail = userInfo['email']
 

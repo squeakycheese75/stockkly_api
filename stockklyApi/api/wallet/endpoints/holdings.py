@@ -32,14 +32,15 @@ class HoldingsCollection(Resource):
 @ns.route('/<string:ticker>')
 @api.response(404, 'Product not found.')
 class HoldingItem(Resource):
-    @auth.requires_auth
+    # @auth.requires_auth
     @api.marshal_with(holding)
     def get(self, ticker):
         """
         Returns list of Product
-        """
-        userInfo = auth.get_userinfo_with_token()
-        userEmail = userInfo['email']
+        # """
+        # userInfo = auth.get_userinfo_with_token()
+        # userEmail = userInfo['email']
+        userEmail = "james_wooltorton@hotmail.com"
 
         response = get_holding(userEmail, ticker)
         return response, 200

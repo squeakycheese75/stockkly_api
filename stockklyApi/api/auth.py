@@ -117,3 +117,7 @@ def get_userinfo_with_token():
     myuser = users.userinfo(get_token_auth_header())
     d = json.loads(myuser)
     return d
+
+
+def get_Token():
+    return get_token_auth_header()
