@@ -45,7 +45,7 @@ def create_product(data):
     return
 
 
-def upsert_product(data):
+def upsert_product(data, id):
     db = get_db()['stockkly']
     product_collection = db['products']
 
@@ -58,4 +58,4 @@ def upsert_product(data):
         "sector": data['sector'],
         "quote": data['quote']
     }
-    return product_collection.update_one({'ticker': data['ticker']}, {"$set": product}, upsert=True)
+    return product_collection.update_one({'ticker': id}, {"$set": product}, upsert=True)

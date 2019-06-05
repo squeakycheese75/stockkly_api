@@ -2,8 +2,8 @@
 from stockklyApi.api import auth
 from stockklyApi.database.db import get_db
 
-from stockklyApi.api.wallet.repositories import prices, balances
-from stockklyApi.api.products.repositories import products
+from stockklyApi.api.wallet.repositories import balances
+from stockklyApi.api.products.repositories import products, prices
 # from stockklyApi.api.wallet.business import product
 
 from bson import json_util

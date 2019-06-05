@@ -24,3 +24,12 @@ product = api.model('Product', {
     'quote':  fields.Nested(quote),
     # "exchanges": ["CPRO"],
 })
+
+
+price = api.model('Price', {
+    'ticker': fields.String,
+    'open': fields.Float,
+    'change': fields.Float,
+    'price':  fields.Float,
+    'movement':  fields.Float
+})

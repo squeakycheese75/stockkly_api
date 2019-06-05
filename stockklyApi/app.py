@@ -12,6 +12,7 @@ from stockklyApi.api.wallet.endpoints.transactions import ns as wallet_transacti
 from stockklyApi.api.wallet.endpoints.balances import ns as wallet_balances_namespace
 from stockklyApi.api.products.endpoints.info import ns as product_info_namespace
 from stockklyApi.api.products.endpoints.sectors import ns as product_sectors_namespace
+from stockklyApi.api.products.endpoints.prices import ns as product_prices_namespace
 
 
 app = Flask(__name__)
@@ -42,6 +43,7 @@ def initialize_app(flask_app):
     api.add_namespace(wallet_balances_namespace)
     api.add_namespace(product_info_namespace)
     api.add_namespace(product_sectors_namespace)
+    api.add_namespace(product_prices_namespace)
 
     # api.add_namespace(transactions_api)
     flask_app.register_blueprint(blueprint)
