@@ -25,12 +25,6 @@ CORS(app)
 # api = Api(app)  # Create a Flask-RESTPlus API
 
 
-# @api.route('/hello')  # Create a URL route to this resource
-# class HelloWorld(Resource):  # Create a RESTful resource
-#     def get(self):  # Create GET endpoint
-#         return {'hello': 'world'}
-
-
 def initialize_app(flask_app):
     # configure_app(flask_app)
 

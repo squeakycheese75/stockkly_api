@@ -5,19 +5,27 @@ def get_price(ticker):
     db = get_db()['stockkly']
     prices_collection = db['prices']
 
-    queryresult = prices_collection.find_one({"ticker": ticker})
+    queryresult = prices_collection.find_one({"ticker": ticker.lower()})
     return queryresult
+
+
+# def get_price(ticker):
+#     db = get_db()['stockkly']
+#     prices_collection = db['prices']
+
+#     queryresult = prices_collection.find_one({"ticker": ticker})
+#     return queryresult
 
 
 def create_price(data):
     db = get_db()['stockkly']
     price_collection = db['prices']
 
-    queryresult = price_collection.find_one({"ticker": data['ticker']})
+    queryresult = price_collection.find_one({"ticker": data['ticker'].lower()})
 
     if not queryresult:
         price = {
-            "ticker": data['ticker'],
+            "ticker": data['ticker'].lower(),
             "open":  data['open'],
             "price": data['price'],
             "change": data['change'],
@@ -32,10 +40,10 @@ def upsert_price(data, id):
     price_collection = db['prices']
 
     price = {
-        "ticker": data['ticker'],
+        "ticker": data['ticker'].lower(),
         "open":  data['open'],
         "price": data['price'],
         "change": data['change'],
         "movement": data['movement']
     }
-    return price_collection.update_one({'ticker': id}, {"$set": price}, upsert=True)
+    return price_collection.update_one({'ticker': id.lower()}, {"$set": price}, upsert=True)
