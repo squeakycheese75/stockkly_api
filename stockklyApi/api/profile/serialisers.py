@@ -12,9 +12,5 @@ profileSettings = api.model('ProfileSettings', {
 user = api.model('User', {
     'userId': fields.String,
     'watching': fields.List(fields.String),
-    # portfolios
-    # 'currency': fields.String,
-    # 'symbol': fields.String,
-    # 'refreshRate': fields.Integer
     'settings': fields.List(fields.Nested(profileSettings)),
 })
