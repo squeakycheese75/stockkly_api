@@ -31,7 +31,8 @@ def calc_change(price, open):
 
 def enrichWithPriceData(item):
     ticker = item['ticker']
-    price = prices.get(ticker)
+    price = prices.get_price(ticker)
+    # if price = None:
 
     change = calc_change(price['price'], price['open'])
     item['change'] = change

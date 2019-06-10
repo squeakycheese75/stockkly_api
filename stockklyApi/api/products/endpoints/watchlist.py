@@ -6,7 +6,7 @@ from flask_restplus import Resource
 from stockklyApi.api.restplus import api
 from stockklyApi.api import auth
 # from stockklyApi.api.products.repositories.prices import get_price, upsert_price, create_price
-# from stockklyApi.api.products.serialisers import price
+# from stockklyApi.api.products.serialisers import watch
 
 log = logging.getLogger(__name__)
 

@@ -32,7 +32,7 @@ class HoldingsCollection(Resource):
 @ns.route('/<string:ticker>')
 @api.response(404, 'Product not found.')
 class HoldingItem(Resource):
-    # @auth.requires_auth
+    @auth.requires_auth
     @api.marshal_with(holding)
     def get(self, ticker):
         """
