@@ -32,20 +32,20 @@ def calc_change(price, open):
 def enrichWithPriceData(item):
     ticker = item['ticker']
     price = prices.get_price(ticker)
-    # if price = None:
-
-    change = calc_change(price['price'], price['open'])
-    item['change'] = change
-    item['price'] = price['price']
-    item['movement'] = calc_movement(change, price['price'])
-    item['total_change'] = calc_total_change(item['qty'], change)
-    item['total'] = calc_total(item['qty'], price['price'])
+    if price:
+        change = calc_change(price['price'], price['open'])
+        item['change'] = change
+        item['price'] = price['price']
+        item['movement'] = calc_movement(change, price['price'])
+        item['total_change'] = calc_total_change(item['qty'], change)
+        item['total'] = calc_total(item['qty'], price['price'])
 
     # enrich with product data
-    #  product = product.get(i['ticker'])
-    item['name'] = 'Microsoft Ltd'
-    item['ccy'] = "USD"
-    item['symbol'] = "$"
+    product = products.get_product(ticker)
+    if product:
+        item['name'] = product['name']
+        item['ccy'] = product['quote']['currency']
+        item['symbol'] = product['quote']['symbol']
     # enrich with spot is necessary
     # Might do once at ui level...?????
     # if portfolioCcy != accetCcy
@@ -73,4 +73,5 @@ def get_holdings(userId):
 
     for item in queryresult:
         resval.append(enrichWithPriceData(item))
+        print(resval)
     return resval
