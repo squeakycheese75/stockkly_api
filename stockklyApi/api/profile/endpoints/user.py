@@ -4,7 +4,7 @@ from flask import request
 from flask_restplus import Resource
 import json
 
-from stockklyApi.api.profile.repository.users import get_user
+from stockklyApi.api.profile.repository.users import get_user, create_user, upsert_user
 from stockklyApi.api.profile.serialisers import user
 
 from stockklyApi.api.restplus import api
@@ -12,29 +12,45 @@ from stockklyApi.api import auth
 
 log = logging.getLogger(__name__)
 
-ns = api.namespace('user', description='Operations related to user data')
+ns = api.namespace('profile/user', description='Operations related to user data')
 
 
 @ns.route('/')
 class ProductCollection(Resource):
     @api.marshal_list_with(user)
-    # @auth.requires_auth
+    @auth.requires_auth
     def get(self):
-        userId = 'james_wooltorton@hotmail.com'
-        response = get_user(userId)
-        # resval = json.loads(response)
+        # userId = 'james_wooltorton@hotmail.com'
+        # get username from token
+        userInfo = auth.get_userinfo_with_token()
+        userEmail = userInfo['email']
+
+        response = get_user(userEmail)
+        if response is None:
+            # Create new profile with defaults
+            response = {
+                # "userId": userEmail,
+                "watchList": ["MSFT", "AAPL"],
+                "currency": "GBP",
+                "symbol": "£",
+                "refreshRate": 30
+            }
+            create_user(response, userEmail)
         return response, 200
 
-    # @api.response(201, 'Category successfully created.')
-    # @api.expect(product)
-    # @auth.requires_auth
-    # def post(self):
-    #     """
-    #     Creates a new product
-    #     """
-    #     data = request.json
-    #     create_product(data)
-    #     return None, 201
+    @api.response(201, 'Category successfully created.')
+    @api.expect(user)
+    @auth.requires_auth
+    def post(self):
+        """
+        Creates a new product
+        """
+        userInfo = auth.get_userinfo_with_token()
+        userEmail = userInfo['email']
+
+        data = request.json
+        create_user(data, userEmail)
+        return None, 201
 
 
 # @ns.route('/<string:id>')
@@ -49,12 +65,16 @@ class ProductCollection(Resource):
 #         response = get_product(id)
 #         return response, 200
 
-#     # @auth.requires_auth
-#     @api.expect(product)
-#     def put(self, id):
-#         data = request.json
-#         upsert_product(data, id)
-#         return None, 204
+
+    @auth.requires_auth
+    @api.expect(user)
+    def put(self):
+        userInfo = auth.get_userinfo_with_token()
+        userEmail = userInfo['email']
+
+        data = request.json
+        upsert_user(data, userEmail)
+        return None, 204
 
     # @api.response(204, 'Category successfully deleted.')
     # def delete(self, id):
