@@ -14,6 +14,8 @@ log = logging.getLogger(__name__)
 
 ns = api.namespace('profile/user', description='Operations related to user data')
 
+default_ticker = ["MSFT", "AAPL"]
+
 
 @ns.route('/')
 class ProductCollection(Resource):
@@ -30,7 +32,7 @@ class ProductCollection(Resource):
             # Create new profile with defaults
             response = {
                 # "userId": userEmail,
-                "watchList": ["MSFT", "AAPL"],
+                "watchList": default_ticker,
                 "currency": "GBP",
                 "symbol": "£",
                 "refreshRate": 30
@@ -73,7 +75,7 @@ class ProductCollection(Resource):
         userEmail = userInfo['email']
 
         data = request.json
-        upsert_user(data, userEmail)
+        record_updated = upsert_user(data, userEmail)
         return None, 204
 
     # @api.response(204, 'Category successfully deleted.')

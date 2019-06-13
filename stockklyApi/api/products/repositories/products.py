@@ -39,7 +39,8 @@ def create_product(data):
             "description": data['description'],
             "company": data['company'],
             "sector": data['sector'],
-            "quote": data['quote']
+            "quote": data['quote'],
+            "exchange": data['exchange']
         }
         product_collection.insert_one(product)
     return
@@ -56,6 +57,7 @@ def upsert_product(data, id):
         "description": data['description'],
         "company": data['company'],
         "sector": data['sector'],
-        "quote": data['quote']
+        "quote": data['quote'],
+        "exchange": data['exchange']
     }
     return product_collection.update_one({'ticker': id}, {"$set": product}, upsert=True)

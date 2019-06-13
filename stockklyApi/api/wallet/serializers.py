@@ -52,6 +52,7 @@ transaction = api.model('Transaction', {
     # 'id': fields.Integer(readOnly=True, description='The unique identifier of a blog category'),
     # 'name': fields.String(required=True, description='Category name'),
     # 'owner':  fields.String,
+    '_id': fields.String,
     'owner': fields.String,
     'ticker': fields.String,
     'transdate': fields.DateTime,

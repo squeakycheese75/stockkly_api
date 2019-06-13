@@ -22,7 +22,7 @@ product = api.model('Product', {
     'company': fields.Nested(company),
     'sector': fields.String,
     'quote':  fields.Nested(quote),
-    # "exchanges": ["CPRO"],
+    "exchange": fields.String,
 })
 
 
