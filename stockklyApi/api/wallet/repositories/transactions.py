@@ -29,15 +29,13 @@ def get_transaction_history_for_user(userId):
     return(json_results)
 
 
-def create_transaction(data):
-    userEmail = auth.get_userinfo_with_token()['email']
-
+def create_transaction(data, userId):
     db = get_db()['stockkly']
     transactionsCollection = db['transactions']
 
     # handle empty lists
     trans = {
-        "owner": userEmail,
+        "owner": userId,
         'ticker': data['ticker'],
         'transdate': data['transdate'],
         'transtype': data['transtype'],
@@ -46,3 +44,20 @@ def create_transaction(data):
         'details': data['details'],
     }
     return transactionsCollection.insert_one(trans)
+
+
+def upsert_transaction(data, userId):
+    db = get_db()['stockkly']
+    trans_collection = db['transactions']
+    id = data['_id']
+
+    trans = {
+        "owner": userId,
+        'ticker': data['ticker'],
+        'transdate': data['transdate'],
+        'transtype': data['transtype'],
+        'quantity': data['quantity'],
+        'price': data['price'],
+        'details': data['details'],
+    }
+    return trans_collection.update_one({'_id': id}, {"$set": trans}, upsert=True)

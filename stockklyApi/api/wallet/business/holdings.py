@@ -75,3 +75,20 @@ def get_holdings(userId):
         resval.append(enrichWithPriceData(item))
         print(resval)
     return resval
+
+
+def update_balance(userId, ticker, qty):
+    holding = get_holding(userId, ticker)
+    response = ''
+    if holding == None:
+        data = {
+            'ticker': ticker,
+            'userId': userId,
+            'qty': qty
+        }
+        response = balances.create_balance(userId, data)
+    else:
+        old_qty = holding['qty']
+        new_qty = old_qty + qty
+        response = balances.update_balance(userId, ticker, new_qty)
+    return response

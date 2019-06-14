@@ -9,6 +9,7 @@ from stockklyApi.api import auth
 from stockklyApi.database.db import get_db
 from stockklyApi.api.wallet.repositories.transactions import get_transaction_history_for_user_and_product, get_transaction_history_for_user
 from stockklyApi.api.wallet.serializers import transaction
+from stockklyApi.api.wallet.business.transaction import upsert_transaction, create_transaction
 
 from stockklyApi.api.restplus import api
 
@@ -17,8 +18,6 @@ log = logging.getLogger(__name__)
 ns = api.namespace('wallet/transactions', description='Operations related to wallet Transactions')
 
 
-# @cross_origin(headers=['Content-Type', 'Authorization'], origin='*', allow_headers='*')
-# @auth.requires_auth
 @ns.route('/')
 class TransactionCollection(Resource):
     @auth.requires_auth
@@ -28,7 +27,7 @@ class TransactionCollection(Resource):
         Returns list of all transactions for an authenticated user.
         """
         # Get email from AccessToken
-        token = auth.get_Token()
+        # token = auth.get_Token()
         userInfo = auth.get_userinfo_with_token()
         userEmail = userInfo['email']
 
@@ -43,11 +42,12 @@ class TransactionCollection(Resource):
     @api.response(201, 'Category successfully created.')
     @api.expect(transaction)
     def post(self):
-        """
-        Creates a new blog category.
-        """
+        userInfo = auth.get_userinfo_with_token()
+        userEmail = userInfo['email']
+
         data = request.json
-        # create_transacion(data)
+        response = create_transaction(data, userEmail)
+
         return None, 201
 
 
@@ -61,7 +61,7 @@ class TransactionItem(Resource):
         Returns list of products transactions for an authenticated user.
         """
         # Get email from AccessToken
-        token = auth.get_Token()
+        # token = auth.get_Token()
         userInfo = auth.get_userinfo_with_token()
         userEmail = userInfo['email']
 
@@ -70,25 +70,14 @@ class TransactionItem(Resource):
         resval = json.loads(response)
         return resval, 200
 
+    @auth.requires_auth
     @api.expect(transaction)
     def put(self, id):
-        """
-        Updates a blog category.
+        userInfo = auth.get_userinfo_with_token()
+        userEmail = userInfo['email']
 
-        Use this method to change the name of a blog category.
-
-        * Send a JSON object with the new name in the request body.
-
-        ```
-        {
-          "name": "New Category Name"
-        }
-        ```
-
-        * Specify the ID of the category to modify in the request URL path.
-        """
         data = request.json
-        # update_transacion(id, data)
+        record_updated = upsert_transaction(data, userEmail)
         return None, 204
 
     @api.response(204, 'Category successfully deleted.')
@@ -96,5 +85,5 @@ class TransactionItem(Resource):
         """
         Deletes blog category.
         """
-        # delete_category(id)
+        # delete_transaction(id)
         return None, 204

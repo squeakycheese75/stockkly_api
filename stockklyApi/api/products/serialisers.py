@@ -14,6 +14,12 @@ quote = api.model('Quote', {
 }
 )
 
+icon = api.model('Icon', {
+    'path': fields.String,
+    'width': fields.Integer,
+}
+)
+
 product = api.model('Product', {
     'ticker': fields.String,
     'displayTicker': fields.String,
