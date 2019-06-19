@@ -9,6 +9,12 @@ def get_price(ticker):
     return queryresult
 
 
+# def find_price(ticker, pdate):
+#     db_conn = db['stockkly']
+#     price_collection = db_conn['prices']
+#     return price_collection.find_one({'ticker': ticker.lower(), 'priceDate': pdate})
+
+
 # def get_price(ticker):
 #     db = get_db()['stockkly']
 #     prices_collection = db['prices']

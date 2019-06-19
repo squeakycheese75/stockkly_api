@@ -16,6 +16,6 @@ class SectorCollection(Resource):
     # @auth.requires_auth
     # @api.marshal_list_with(transaction)
     def get(self):
-        resval = ["Equity", "Crypto", "Metals"]
+        resval = ["Equity", "Crypto", "Precious metals"]
         # resval = json.loads(response)
         return resval, 200

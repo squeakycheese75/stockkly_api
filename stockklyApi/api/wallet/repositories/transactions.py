@@ -14,7 +14,7 @@ def get_transaction_history_for_user_and_product(userId, ticker):
     db = get_db()['stockkly']
     user_collection = db['transactions']
 
-    queryresult = user_collection.find({"owner": userId, "ticker": ticker})
+    queryresult = user_collection.find({"owner": userId, "ticker": ticker.lower()})
     json_results = json_util.dumps(queryresult)
     return json_results
 
@@ -36,7 +36,7 @@ def create_transaction(data, userId):
     # handle empty lists
     trans = {
         "owner": userId,
-        'ticker': data['ticker'],
+        'ticker': data['ticker'].lower(),
         'transdate': data['transdate'],
         'transtype': data['transtype'],
         'quantity': data['quantity'],
@@ -49,15 +49,15 @@ def create_transaction(data, userId):
 def upsert_transaction(data, userId):
     db = get_db()['stockkly']
     trans_collection = db['transactions']
-    id = data['_id']
+    mongoId = data['_id']
 
     trans = {
         "owner": userId,
-        'ticker': data['ticker'],
+        'ticker': data['ticker'].lower(),
         'transdate': data['transdate'],
         'transtype': data['transtype'],
         'quantity': data['quantity'],
         'price': data['price'],
         'details': data['details'],
     }
-    return trans_collection.update_one({'_id': id}, {"$set": trans}, upsert=True)
+    return trans_collection.update_one({'_id': mongoId}, {"$set": trans}, upsert=True)

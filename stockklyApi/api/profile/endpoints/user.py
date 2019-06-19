@@ -67,7 +67,6 @@ class ProductCollection(Resource):
 #         response = get_product(id)
 #         return response, 200
 
-
     @auth.requires_auth
     @api.expect(user)
     def put(self):

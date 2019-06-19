@@ -5,11 +5,11 @@ from bson import json_util
 # from bson.objectid import ObjectId
 
 
-def get_product(id):
+def get_product(ticker):
     db = get_db()['stockkly']
     product_collection = db['products']
 
-    queryresult = product_collection.find_one({"ticker": id})
+    queryresult = product_collection.find_one({"ticker": ticker.lower()})
 
     return queryresult
 
@@ -29,11 +29,11 @@ def create_product(data):
     db = get_db()['stockkly']
     product_collection = db['products']
 
-    queryresult = product_collection.find_one({"ticker": data['ticker']})
+    queryresult = product_collection.find_one({"ticker": data['ticker'].lower()})
 
     if not queryresult:
         product = {
-            "ticker": data['ticker'],
+            "ticker": data['ticker'].lower(),
             "displayTicker":  data['displayTicker'],
             "name": data['name'],
             "description": data['description'],
@@ -46,12 +46,12 @@ def create_product(data):
     return
 
 
-def upsert_product(data, id):
+def upsert_product(data, ticker):
     db = get_db()['stockkly']
     product_collection = db['products']
 
     product = {
-        "ticker": data['ticker'],
+        "ticker": data['ticker'].lower(),
         "displayTicker":  data['displayTicker'],
         "name": data['name'],
         "description": data['description'],
@@ -60,4 +60,4 @@ def upsert_product(data, id):
         "quote": data['quote'],
         "exchange": data['exchange']
     }
-    return product_collection.update_one({'ticker': id}, {"$set": product}, upsert=True)
+    return product_collection.update_one({'ticker': ticker.lower()}, {"$set": product}, upsert=True)
