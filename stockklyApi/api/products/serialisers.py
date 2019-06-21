@@ -37,5 +37,6 @@ price = api.model('Price', {
     'open': fields.Float,
     'change': fields.Float,
     'price':  fields.Float,
-    'movement':  fields.Float
+    'movement':  fields.Float,
+    'priceDate': fields.DateTime
 })
