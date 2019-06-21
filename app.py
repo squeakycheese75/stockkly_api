@@ -21,9 +21,10 @@ app = Flask(__name__)
 logging_conf_path = os.path.normpath(os.path.join(os.path.dirname(__file__), 'logging.conf'))
 logging.config.fileConfig(logging_conf_path)
 log = logging.getLogger(__name__)
+CORS(app)
 
 # CORS(app, expose_headers='Authorization', supports_credentials=True)
-CORS(app)
+
 # api = Api(app)  # Create a Flask-RESTPlus API
 
 
@@ -49,22 +50,11 @@ def initialize_app(flask_app):
     # db.init_app(flask_app)
 
 
-# if __name__ == '__main__':
-#     # app.run(debug=True)  # Start a development server
-#     initialize_app(app)
-#     logging.basicConfig(filename='error.log', level=logging.DEBUG)
-#     # log.info(
-#     #     '>>>>> Starting development server at http://{}:5000/api/ <<<<<'.format(settings.FLASK_HOST))
-#     app.run(host=settings.FLASK_HOST, port=settings.FLASK_PORT, debug=settings.FLASK_DEBUG)
-
 def main():
     initialize_app(app)
-    log.info(
-        '>>>>> Starting development server at http://{}:5000/api/ <<<<<'.format(settings.FLASK_HOST))
-    # app.run(debug=settings.FLASK_DEBUG)
-    # app.run(host=settings.FLASK_HOST, port=settings.FLASK_PORT, debug=settings.FLASK_DEBUG)
+    log.info('>>>>> Starting development server at http://{}/api/ <<<<<'.format(app.config['SERVER_NAME']))
+    app.run(debug=settings.FLASK_DEBUG)
 
 
-# if __name__ == "__main__":
-#     main()
-main()
+if __name__ == "__main__":
+    main()
