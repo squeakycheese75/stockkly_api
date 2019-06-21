@@ -14,7 +14,7 @@ def get_transaction_history_for_user_and_product(userId, ticker):
     db = get_db()['stockkly']
     user_collection = db['transactions']
 
-    queryresult = user_collection.find({"owner": userId, "ticker": ticker.lower()})
+    queryresult = user_collection.find({"owner": userId, "ticker": ticker.upper()})
     json_results = json_util.dumps(queryresult)
     return json_results
 
@@ -36,7 +36,7 @@ def create_transaction(data, userId):
     # handle empty lists
     trans = {
         "owner": userId,
-        'ticker': data['ticker'].lower(),
+        'ticker': data['ticker'].upper(),
         'transdate': data['transdate'],
         'transtype': data['transtype'],
         'quantity': data['quantity'],
@@ -53,7 +53,7 @@ def upsert_transaction(data, userId):
 
     trans = {
         "owner": userId,
-        'ticker': data['ticker'].lower(),
+        'ticker': data['ticker'].upper(),
         'transdate': data['transdate'],
         'transtype': data['transtype'],
         'quantity': data['quantity'],

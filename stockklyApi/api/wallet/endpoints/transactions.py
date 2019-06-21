@@ -39,7 +39,7 @@ class TransactionCollection(Resource):
         resval = json.loads(response)
         return resval, 200
 
-    @api.response(201, 'Category successfully created.')
+    @api.response(201, 'Transaction successfully created.')
     @api.expect(transaction)
     def post(self):
         userInfo = auth.get_userinfo_with_token()
@@ -52,7 +52,7 @@ class TransactionCollection(Resource):
 
 
 @ns.route('/<string:id>')
-@api.response(404, 'Category not found.')
+@api.response(404, 'Transaction not found.')
 class TransactionItem(Resource):
     @auth.requires_auth
     @api.marshal_list_with(transaction)
@@ -80,7 +80,7 @@ class TransactionItem(Resource):
         record_updated = upsert_transaction(data, userEmail)
         return None, 204
 
-    @api.response(204, 'Category successfully deleted.')
+    @api.response(204, 'Transaction successfully deleted.')
     def delete(self, id):
         """
         Deletes blog category.

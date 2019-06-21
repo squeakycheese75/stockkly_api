@@ -9,7 +9,7 @@ def get_product(ticker):
     db = get_db()['stockkly']
     product_collection = db['products']
 
-    queryresult = product_collection.find_one({"ticker": ticker.lower()})
+    queryresult = product_collection.find_one({"ticker": ticker.upper()})
 
     return queryresult
 
@@ -29,11 +29,11 @@ def create_product(data):
     db = get_db()['stockkly']
     product_collection = db['products']
 
-    queryresult = product_collection.find_one({"ticker": data['ticker'].lower()})
+    queryresult = product_collection.find_one({"ticker": data['ticker'].upper()})
 
     if not queryresult:
         product = {
-            "ticker": data['ticker'].lower(),
+            "ticker": data['ticker'].upper(),
             "displayTicker":  data['displayTicker'],
             "name": data['name'],
             "description": data['description'],
@@ -51,7 +51,7 @@ def upsert_product(data, ticker):
     product_collection = db['products']
 
     product = {
-        "ticker": data['ticker'].lower(),
+        "ticker": data['ticker'].upper(),
         "displayTicker":  data['displayTicker'],
         "name": data['name'],
         "description": data['description'],
@@ -60,4 +60,4 @@ def upsert_product(data, ticker):
         "quote": data['quote'],
         "exchange": data['exchange']
     }
-    return product_collection.update_one({'ticker': ticker.lower()}, {"$set": product}, upsert=True)
+    return product_collection.update_one({'ticker': ticker.upper()}, {"$set": product}, upsert=True)

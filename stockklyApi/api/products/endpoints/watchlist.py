@@ -25,7 +25,7 @@ class WatchListItem(Resource):
         response = []
         tickerList = tickers.split(",")
         for item in tickerList:
-            resval = watchlist.get_ticker(item.lower().strip())
+            resval = watchlist.get_ticker(item.upper().strip())
             if resval is not None:
                 response.append(resval)
         # response = get_prices_for_list(tickers)
