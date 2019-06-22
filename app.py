@@ -1,11 +1,17 @@
 from flask import Flask, Blueprint
 from flask_restplus import Resource, Api
 from flask_cors import CORS
+# from flask.ext.cache import Cache
+
 
 import os
 import logging.config
 import settings
 from api.restplus import api
+
+from cache import cache
+# from flask.cache import Cache
+# from flask_cache import Cache
 
 from api.wallet.endpoints.holdings import ns as wallet_holdings_namespace
 from api.wallet.endpoints.transactions import ns as wallet_transactions_namespace
@@ -18,6 +24,7 @@ from api.products.endpoints.watchlist import ns as product_watchlist_namespace
 
 
 app = Flask(__name__)
+# cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 logging_conf_path = os.path.normpath(os.path.join(os.path.dirname(__file__), 'logging.conf'))
 logging.config.fileConfig(logging_conf_path)
 log = logging.getLogger(__name__)
@@ -30,7 +37,9 @@ CORS(app)
 
 def initialize_app(flask_app):
     # configure_app(flask_app)
-
+    # cache.init_app(app)
+    # cache = Cache(app, config={'CACHE_TYPE': 'simple'})
+    # cache = Cache(app, config={'CACHE_TYPE': 'simple'})
     blueprint = Blueprint('api', __name__, url_prefix='/api')
     api.init_app(flask_app)
     api.init_app(blueprint)
