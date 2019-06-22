@@ -5,6 +5,7 @@ from flask_restplus import Resource
 
 from api.restplus import api
 from api import auth
+from cache import cache
 
 log = logging.getLogger(__name__)
 
@@ -14,9 +15,10 @@ ns = api.namespace('products/sectors', description='Operations related to Produc
 @ns.route('/')
 class SectorCollection(Resource):
     # @auth.requires_auth
-    # @api.marshal_list_with(transaction)
     def get(self):
+        rv = cache.get('sectorsList')
+        if rv is None:
+            rv = ["Precious metals"]
+            cache.set('sectorsList', rv, timeout=5 * 60)
         # resval = ["Equity", "Crypto", "Precious metals"]
-        resval = ["Precious metals"]
-        # resval = json.loads(response)
-        return resval, 200
+        return rv, 200

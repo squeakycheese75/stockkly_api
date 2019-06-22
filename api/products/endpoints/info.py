@@ -9,6 +9,7 @@ from api.products.serialisers import product
 
 from api.restplus import api
 from api import auth
+from cache import cache
 
 log = logging.getLogger(__name__)
 
@@ -19,9 +20,12 @@ ns = api.namespace('products', description='Operations related to Product data')
 class ProductCollection(Resource):
     @api.marshal_list_with(product)
     def get(self):
-        response = get_products()
-        resval = json.loads(response)
-        return resval, 200
+        rv = cache.get('productList')
+        if rv is None:
+            response = get_products()
+            rv = json.loads(response)
+            cache.set('productList', rv, timeout=60 * 60)
+        return rv, 200
 
     @api.response(201, 'Category successfully created.')
     @api.expect(product)
@@ -42,10 +46,14 @@ class ProductItem(Resource):
     @api.marshal_with(product)
     def get(self, id):
         """
-        Returns list of Product
+        Returns a Product
         """
-        response = get_product(id)
-        return response, 200
+        cache_key = 'product:' + id
+        rv = cache.get(cache_key)
+        if rv is None:
+            rv = get_product(id)
+            cache.set(cache_key, rv, timeout=60 * 60)
+        return rv, 200
 
     # @auth.requires_auth
     @api.expect(product)
