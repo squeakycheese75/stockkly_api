@@ -1,13 +1,22 @@
+from api.products.repositories.products import get_product
+from api.products.repositories.prices import get_price
+
+
 def get_ticker(ticker):
+    product = get_product(ticker)
+    price = get_price(ticker)
     response = {
-        "ccy": "USD",
-        "change": 0.51,
+        "ccy": product["quote"]["currency"],
+        "change": price["change"],
         "id": ticker,
-        "movement": 1.06,
-        "name": "Tesla",
-        "price": 206.98,
-        "spot": 1.2922,
-        "symbol": "$",
+        "movement": price["movement"],
+        "name": product["name"],
+        "price": price["price"],
+        "spot": 0,
+        "symbol": product["quote"]["symbol"],
         "ticker": ticker
     }
+    # lookup price
+    # lookip product
+
     return response

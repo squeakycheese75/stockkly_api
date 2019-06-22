@@ -20,7 +20,7 @@ if ENV_FILE:
     load_dotenv(ENV_FILE)
 MONGO_CONNECTION = env.get("MONGO_CONNECTION")
 
-#
+# Initialise
 config = {
     "client": MONGO_CONNECTION,
     'db': 'stockkly',
