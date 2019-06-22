@@ -58,5 +58,5 @@ def main():
             debug=settings.FLASK_DEBUG)
 
 
-# if __name__ == "__main__":
-main()
+if __name__ == "__main__":
+    main()
