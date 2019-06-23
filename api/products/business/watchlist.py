@@ -3,7 +3,9 @@ from api.products.repositories.prices import get_price
 
 
 def get_ticker(ticker):
+    # lookup product
     product = get_product(ticker)
+    # lookup price
     price = get_price(ticker)
     response = {
         "ccy": product["quote"]["currency"],
@@ -16,7 +18,5 @@ def get_ticker(ticker):
         "symbol": product["quote"]["symbol"],
         "ticker": ticker
     }
-    # lookup price
-    # lookip product
 
     return response

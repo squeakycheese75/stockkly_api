@@ -1,11 +1,8 @@
-from database.db import get_db
+from mongo import mongoDB
 
 
 def get_price(ticker):
-    db = get_db()['stockkly']
-    prices_collection = db['prices']
-
-    queryresult = prices_collection.find_one({"ticker": ticker.upper()})
+    queryresult = mongoDB.db.prices.find_one({"ticker": ticker.upper()})
     return queryresult
 
 
@@ -24,10 +21,7 @@ def get_price(ticker):
 
 
 def create_price(data):
-    db = get_db()['stockkly']
-    price_collection = db['prices']
-
-    queryresult = price_collection.find_one({"ticker": data['ticker'].upper()})
+    queryresult = mongoDB.db.prices.find_one({"ticker": data['ticker'].upper()})
 
     if not queryresult:
         price = {
@@ -37,13 +31,13 @@ def create_price(data):
             "change": data['change'],
             "movement": data['movement']
         }
-        price_collection.insert_one(price)
+        mongoDB.db.prices.insert_one(price)
     return
 
 
 def upsert_price(data, id):
-    db = get_db()['stockkly']
-    price_collection = db['prices']
+    # db = get_db()['stockkly']
+    # price_collection = db['prices']
 
     price = {
         "ticker": data['ticker'].upper(),
@@ -52,4 +46,4 @@ def upsert_price(data, id):
         "change": data['change'],
         "movement": data['movement']
     }
-    return price_collection.update_one({'ticker': id.upper()}, {"$set": price}, upsert=True)
+    return mongoDB.db.prices.update_one({'ticker': id.upper()}, {"$set": price}, upsert=True)
