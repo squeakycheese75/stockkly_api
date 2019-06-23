@@ -11,6 +11,7 @@ from api.products.serialisers import price
 import stockkly_repo
 import html
 from cache import cache
+from api.products.repositories.prices import get_price
 
 
 log = logging.getLogger(__name__)
@@ -18,18 +19,18 @@ log = logging.getLogger(__name__)
 ns = api.namespace('products/prices', description='Operations related to Prices sectors')
 
 # load the mongo connection
-ENV_FILE = find_dotenv()
-if ENV_FILE:
-    load_dotenv(ENV_FILE)
-MONGO_CONNECTION = env.get("MONGO_CONNECTION")
+# ENV_FILE = find_dotenv()
+# if ENV_FILE:
+#     load_dotenv(ENV_FILE)
+# MONGO_CONNECTION = env.get("MONGO_CONNECTION")
 
 # Initialise
-config = {
-    "client": MONGO_CONNECTION,
-    'db': 'stockkly',
-    'collection': 'prices'
-}
-priceRepo = stockkly_repo.prices(config)
+# config = {
+#     "client": MONGO_CONNECTION,
+#     'db': 'stockkly',
+#     'collection': 'prices'
+# }
+# priceRepo = stockkly_repo.prices(config)
 
 
 # @ns.route('/')
@@ -60,7 +61,8 @@ class PriceItem(Resource):
         cache_key = 'price:' + unecTicker
         rv = cache.get(cache_key)
         if rv is None:
-            rv = priceRepo.get_price_now(unecTicker)
+            # rv = priceRepo.get_price_now(unecTicker)
+            rv = get_price(unecTicker)
             cache.set(cache_key, rv, timeout=30)
         return rv, 200
 

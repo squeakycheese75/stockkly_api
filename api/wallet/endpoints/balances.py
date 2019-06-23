@@ -6,7 +6,7 @@ from api.wallet.repositories.balances import create_balance, update_balance
 from api.wallet.serializers import balance
 from api.restplus import api
 from api import auth
-
+from cache import cache
 
 log = logging.getLogger(__name__)
 
@@ -22,6 +22,13 @@ class HoldingsCollection(Resource):
         Creates a new blog category.
         """
         # userEmail = 'james_wooltorton@hotmail.com'
+        # userToken = auth.get_Token()
+        # rv = cache.get(userToken)
+        # if rv is None:
+        #     response = get_products()
+        #     rv = json.loads(response)
+        #     cache.set('productList', rv, timeout=60 * 60)
+        # return rv, 200
         userInfo = auth.get_userinfo_with_token()
         userEmail = userInfo['email']
 
