@@ -41,7 +41,7 @@ CORS(app)
 
 
 def initialize_app(flask_app):
-    mongoDB.init_app(app)
+
     # configure_app(flask_app)
     # cache.init_app(app)
     # cache = Cache(app, config={'CACHE_TYPE': 'simple'})
@@ -63,6 +63,7 @@ def initialize_app(flask_app):
     flask_app.register_blueprint(blueprint)
 
     # db.init_app(flask_app)
+    mongoDB.init_app(app)
 
 
 # def main():
