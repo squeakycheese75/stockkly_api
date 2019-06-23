@@ -14,6 +14,15 @@ def get_product(ticker):
     return queryresult
 
 
+def get_sectors():
+    db = get_db()['stockkly']
+    product_collection = db['products']
+
+    queryresult = product_collection.distinct('sector')
+
+    return queryresult
+
+
 def get_products():
     db = get_db()['stockkly']
     product_collection = db['products']

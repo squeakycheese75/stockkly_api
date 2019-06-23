@@ -9,6 +9,9 @@ from api.restplus import api
 from api import auth
 from api.products.serialisers import price
 import stockkly_repo
+import html
+from cache import cache
+
 
 log = logging.getLogger(__name__)
 
@@ -52,23 +55,28 @@ class PriceItem(Resource):
         """
         Returns list of Product
         """
-        # response = price.get_price_now(ticker)
-        response = priceRepo.get_price_now(ticker)
-        return response, 200
 
-    # # @auth.requires_auth
-    # @api.expect(price)
-    # def put(self, ticker):
-    #     data = request.json
-    #     upsert_price(data, ticker)
-    #     return None, 204
+        unecTicker = html.unescape(ticker)
+        cache_key = 'price:' + unecTicker
+        rv = cache.get(cache_key)
+        if rv is None:
+            rv = priceRepo.get_price_now(unecTicker)
+            cache.set(cache_key, rv, timeout=30)
+        return rv, 200
 
-    # @api.expect(price)
-    # def post(self, ticker):
-    #     """
-    #     Creates a new product
-    #     """
-    #     data = request.json
-    #     # create_price(data)
-    #     price.upsert_price_with_data(id, data)
-    #     return None, 201
+# # @auth.requires_auth
+# @api.expect(price)
+# def put(self, ticker):
+#     data = request.json
+#     upsert_price(data, ticker)
+#     return None, 204
+
+# @api.expect(price)
+# def post(self, ticker):
+#     """
+#     Creates a new product
+#     """
+#     data = request.json
+#     # create_price(data)
+#     price.upsert_price_with_data(id, data)
+#     return None, 201

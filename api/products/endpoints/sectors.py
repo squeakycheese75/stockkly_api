@@ -2,6 +2,7 @@ import logging
 from flask_cors import cross_origin
 from flask import request
 from flask_restplus import Resource
+from api.products.repositories.products import get_sectors
 
 from api.restplus import api
 from api import auth
@@ -18,7 +19,6 @@ class SectorCollection(Resource):
     def get(self):
         rv = cache.get('sectorsList')
         if rv is None:
-            rv = ["Precious metals"]
+            rv = get_sectors()
             cache.set('sectorsList', rv, timeout=5 * 60)
-        # resval = ["Equity", "Crypto", "Precious metals"]
         return rv, 200
