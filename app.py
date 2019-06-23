@@ -1,7 +1,8 @@
 from flask import Flask, Blueprint
 from flask_restplus import Resource, Api
 from flask_cors import CORS
-# from flask.ext.cache import Cache
+
+from os import environ as env
 
 
 import os
@@ -10,8 +11,7 @@ import settings
 from api.restplus import api
 
 from cache import cache
-# from flask.cache import Cache
-# from flask_cache import Cache
+from mongo import mongoDB
 
 from api.wallet.endpoints.holdings import ns as wallet_holdings_namespace
 from api.wallet.endpoints.transactions import ns as wallet_transactions_namespace
@@ -24,7 +24,7 @@ from api.products.endpoints.watchlist import ns as product_watchlist_namespace
 
 
 app = Flask(__name__)
-# cache = Cache(app, config={'CACHE_TYPE': 'simple'})
+app.config["MONGO_URI"] = 'mongodb://localhost:27017/stockkly'
 logging_conf_path = os.path.normpath(os.path.join(os.path.dirname(__file__), 'logging.conf'))
 logging.config.fileConfig(logging_conf_path)
 log = logging.getLogger(__name__)
@@ -36,6 +36,7 @@ CORS(app)
 
 
 def initialize_app(flask_app):
+    mongoDB.init_app(app)
     # configure_app(flask_app)
     # cache.init_app(app)
     # cache = Cache(app, config={'CACHE_TYPE': 'simple'})

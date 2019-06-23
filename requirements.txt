@@ -8,3 +8,4 @@ pymongo==3.7.2
 stockkly_repo==0.1.2
 dnspython==1.16.0
 cachelib==0.1
+Flask-PyMongo==2.3.0
