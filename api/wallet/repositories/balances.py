@@ -19,7 +19,7 @@ def get_balance(userId, ticker):
 def get_balances(userId):
     # db = get_db()['stockkly']
     # holdingCollection = db['balances']
-    return mongoDB.db.balances..find({"userId": userId})
+    return mongoDB.db.balances.find({"userId": userId})
 
 
 def create_balance(userEmail, data):
@@ -31,10 +31,10 @@ def create_balance(userEmail, data):
         'userId': userEmail,
         'qty': data['qty']
     }
-    return mongoDB.db.balances..insert_one(balance)
+    return mongoDB.db.balances.insert_one(balance)
 
 
 def update_balance(userEmail, ticker, qty):
     # db = get_db()['stockkly']
     # product_collection = db['balances']
-    return mongoDB.db.balances..update_one({'ticker': ticker, "userId": userEmail}, {"$set": {"qty": qty}}, upsert=True)
+    return mongoDB.db.balances.update_one({'ticker': ticker, "userId": userEmail}, {"$set": {"qty": qty}}, upsert=True)

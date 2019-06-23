@@ -1,6 +1,7 @@
 from flask import Flask, Blueprint
 from flask_restplus import Resource, Api
 from flask_cors import CORS
+from dotenv import load_dotenv, find_dotenv
 
 from os import environ as env
 
@@ -22,9 +23,13 @@ from api.products.endpoints.prices import ns as product_prices_namespace
 from api.profile.endpoints.user import ns as profile_users_namespace
 from api.products.endpoints.watchlist import ns as product_watchlist_namespace
 
+ENV_FILE = find_dotenv()
+if ENV_FILE:
+    load_dotenv(ENV_FILE)
+MONGO_CONNECTION = env.get("MONGO_CONNECTION")
 
 app = Flask(__name__)
-app.config["MONGO_URI"] = 'mongodb://localhost:27017/stockkly'
+app.config["MONGO_URI"] = MONGO_CONNECTION
 logging_conf_path = os.path.normpath(os.path.join(os.path.dirname(__file__), 'logging.conf'))
 logging.config.fileConfig(logging_conf_path)
 log = logging.getLogger(__name__)

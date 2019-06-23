@@ -1,6 +1,6 @@
 
 from api import auth
-from database.db import get_db
+# from database.db import get_db
 
 from api.wallet.repositories import balances
 from api.products.repositories import products, prices
