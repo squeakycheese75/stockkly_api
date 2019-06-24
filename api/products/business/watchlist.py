@@ -1,5 +1,5 @@
 from api.products.repositories.products import get_product
-from api.products.repositories.prices import get_price
+from api.products.repositories.prices import get_price_now
 
 
 def get_ticker(ticker):
@@ -7,7 +7,7 @@ def get_ticker(ticker):
         # lookup product
         product = get_product(ticker)
         # lookup price
-        price = get_price(ticker)
+        price = get_price_now(ticker)
         response = {
             "ccy": product["quote"]["currency"],
             "change": price["change"],
