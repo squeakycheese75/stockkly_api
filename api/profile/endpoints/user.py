@@ -22,8 +22,6 @@ class ProductCollection(Resource):
     @api.marshal_list_with(user)
     @auth.requires_auth
     def get(self):
-        # userId = 'james_wooltorton@hotmail.com'
-        # get username from token
         userInfo = auth.get_userinfo_with_token()
         userEmail = userInfo['email']
 
