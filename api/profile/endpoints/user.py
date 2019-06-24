@@ -14,7 +14,7 @@ log = logging.getLogger(__name__)
 
 ns = api.namespace('profile/user', description='Operations related to user data')
 
-default_ticker = ["MSFT", "AAPL"]
+default_ticker = []
 
 
 @ns.route('/')
