@@ -1,24 +1,17 @@
-# from database.db import get_db
 from mongo import mongoDB
 
 
 def get_user(userId):
-    # db = get_db()['stockkly']
-    # user_collection = db['users']
-
-    queryresult = mongoDB.db.users.find_one({"userId": userId.upper()})
+    queryresult = mongoDB.db.users.find_one({"userId": userId})
     return queryresult
 
 
 def create_user(data, userId):
-    # db = get_db()['stockkly']
-    # user_collection = db['users']
-
-    queryresult = mongoDB.db.users.find_one({"userId": userId.upper()})
+    queryresult = mongoDB.db.users.find_one({"userId": userId})
 
     if not queryresult:
         user = {
-            "userId": userId.upper(),
+            "userId": userId,
             "watchList": data['watchList'],
             "currency": data['currency'],
             "symbol": data['symbol'],
@@ -29,13 +22,10 @@ def create_user(data, userId):
 
 
 def upsert_user(data, userId):
-    # db = get_db()['stockkly']
-    # user_collection = db['users']
-
     user = {
         "watchList": data['watchList'],
         "currency": data['currency'],
         "symbol": data['symbol'],
         "refreshRate": data['refreshRate']
     }
-    return mongoDB.db.users.update_one({'userId': userId.upper()}, {"$set": user}, upsert=True)
+    return mongoDB.db.users.update_one({'userId': userId}, {"$set": user}, upsert=True)
