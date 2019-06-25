@@ -4,6 +4,7 @@ from api import auth
 
 from api.wallet.repositories import balances
 from api.products.repositories import products, prices
+from api.profile.repository.users import get_user
 # from stockklyApi.api.wallet.business import product
 
 from bson import json_util
@@ -29,27 +30,8 @@ def calc_change(price, open):
     return (price - open)
 
 
-def enrichWithPriceData(item):
+def enrichWithPriceData(item, userCcy):
     ticker = item['ticker']
-    # price = prices.get_price_now(ticker)
-    price = prices.get_price_now(ticker)
-    if not price:
-        price = prices.get_price_latest(ticker)
-
-    if price:
-        change = calc_change(price['price'], price['open'])
-        item['change'] = change
-        item['price'] = price['price']
-        item['movement'] = calc_movement(change, price['price'])
-        item['total_change'] = calc_total_change(item['qty'], change)
-        item['total'] = calc_total(item['qty'], price['price'])
-    else:
-        item['change'] = 0
-        item['price'] = 0
-        item['movement'] = 0
-        item['total_change'] = 0
-        item['total'] = 0
-
     # enrich with product data
     product = products.get_product(ticker)
     if product:
@@ -60,10 +42,30 @@ def enrichWithPriceData(item):
         item['name'] = 'na'
         item['ccy'] = 'na'
         item['symbol'] = 'na'
-    # enrich with spot is necessary
-    # Might do once at ui level...?????
-    # if portfolioCcy != accetCcy
-    item['spot'] = 1.2922
+
+    if item['ccy'] == userCcy:
+        item['spot'] = 1
+    else:
+        item['spot'] = 1.27
+
+    price = prices.get_price_now(ticker)
+    if not price:
+        price = prices.get_price_latest(ticker)
+
+    if price:
+        change = calc_change(price['price'], price['open'])
+        item['change'] = change
+        item['price'] = price['price']
+        item['movement'] = calc_movement(change, price['price'])
+        item['total_change'] = (calc_total_change(item['qty'], change) / item['spot'])
+        item['total'] = (calc_total(item['qty'], price['price']) / item['spot'])
+    else:
+        item['change'] = 0
+        item['price'] = 0
+        item['movement'] = 0
+        item['total_change'] = 0
+        item['total'] = 0
+
     return item
 
 
@@ -74,11 +76,16 @@ def get_holding(userId, ticker):
     if resval is None:
         return
 
-    resval = enrichWithPriceData(resval)
+    userProfile = get_user(userId)
+
+    resval = enrichWithPriceData(resval, userProfile['currency'])
     return resval
 
 
 def get_holdings(userId):
+
+    userProfile = get_user(userId)
+
     queryresult = balances.get_balances(userId)
 
     if queryresult.count() == 0:
@@ -86,7 +93,7 @@ def get_holdings(userId):
     resval = []
 
     for item in queryresult:
-        resval.append(enrichWithPriceData(item))
+        resval.append(enrichWithPriceData(item, userProfile['currency']))
         print(resval)
     return resval
 
