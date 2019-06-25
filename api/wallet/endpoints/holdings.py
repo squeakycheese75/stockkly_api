@@ -6,6 +6,7 @@ from api.wallet.business.holdings import get_holdings, get_holding
 from api.wallet.serializers import holding
 from api.restplus import api
 from api import auth
+from cache import cache
 
 
 log = logging.getLogger(__name__)
@@ -19,13 +20,20 @@ class HoldingsCollection(Resource):
     @auth.requires_auth
     def get(self):
         """
-        Returns list of blog categories.
+        Returns list of Holdings
         """
-        # userEmail = 'james_wooltorton@hotmail.com'
-        userInfo = auth.get_userinfo_with_token()
-        userEmail = userInfo['email']
+        # auth = request.headers.get("Authorization", None)
 
-        response = get_holdings(userEmail)
+        # print(auth)
+        cache_key = 'auth:' + request.headers.get("Authorization", None)
+        rv = cache.get(cache_key)
+        if rv is None:
+            userInfo = auth.get_userinfo_with_token()
+            rv = userInfo['email']
+            cache.set(cache_key, rv, timeout=60 * 50)
+        # return rv, 200
+
+        response = get_holdings(rv)
         return response, 200
 
 
@@ -36,11 +44,17 @@ class HoldingItem(Resource):
     @api.marshal_with(holding)
     def get(self, ticker):
         """
-        Returns list of Product
+        Returns list of Holdings
         # """
         # userInfo = auth.get_userinfo_with_token()
         # userEmail = userInfo['email']
-        userEmail = "james_wooltorton@hotmail.com"
+        # userEmail = "james_wooltorton@hotmail.com"
+        cache_key = 'auth:' + request.headers.get("Authorization", None)
+        rv = cache.get(cache_key)
+        if rv is None:
+            userInfo = auth.get_userinfo_with_token()
+            rv = userInfo['email']
+            cache.set(cache_key, rv, timeout=60 * 50)
 
-        response = get_holding(userEmail, ticker)
+        response = get_holding(rv, ticker)
         return response, 200

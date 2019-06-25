@@ -2,9 +2,14 @@ from mongo import mongoDB
 import datetime
 
 
-# def get_price_latest(ticker):
-#     queryresult = mongoDB.db.prices.find({"ticker": ticker.upper()}).sort({"priceDate": -1}).limit(1)
-#     return queryresult
+def get_price_latest(ticker):
+    # queryresult = mongoDB.db.prices.find({"ticker": ticker.upper()}).sort({"priceDate": -1}).limit(1)
+    # queryresult = mongoDB.db.prices.find_one({"ticker":  ticker.upper()}).sort('priceDate', -1)
+    queryresult = mongoDB.db.prices.find_one(
+        {'ticker': ticker.upper()},
+        sort=[('priceDate', -1)]
+    )
+    return queryresult
 
 
 def get_price_now(ticker):

@@ -10,6 +10,7 @@ from database.db import get_db
 from api.wallet.repositories.transactions import get_transaction_history_for_user_and_product, get_transaction_history_for_user
 from api.wallet.serializers import transaction
 from api.wallet.business.transaction import upsert_transaction, create_transaction
+from cache import cache
 
 from api.restplus import api
 
@@ -28,13 +29,17 @@ class TransactionCollection(Resource):
         """
         # Get email from AccessToken
         # token = auth.get_Token()
-        userInfo = auth.get_userinfo_with_token()
-        userEmail = userInfo['email']
+        # userInfo = auth.get_userinfo_with_token()
+        # userEmail = userInfo['email']
 
-        # userEmail = 'james_wooltorton@hotmail.com'
-        # ticker = 'MSFT'
-        # response = get_transaction_history_for_user_and_product(userEmail, ticker)
-        response = get_transaction_history_for_user(userEmail)
+        cache_key = 'auth:' + request.headers.get("Authorization", None)
+        rv = cache.get(cache_key)
+        if rv is None:
+            userInfo = auth.get_userinfo_with_token()
+            rv = userInfo['email']
+            cache.set(cache_key, rv, timeout=60 * 50)
+
+        response = get_transaction_history_for_user(rv)
         #  I know but if i don't  do this it runs through dumps twice
         resval = json.loads(response)
         return resval, 200
@@ -62,10 +67,16 @@ class TransactionItem(Resource):
         """
         # Get email from AccessToken
         # token = auth.get_Token()
-        userInfo = auth.get_userinfo_with_token()
-        userEmail = userInfo['email']
+        # userInfo = auth.get_userinfo_with_token()
+        # userEmail = userInfo['email']
+        cache_key = 'auth:' + request.headers.get("Authorization", None)
+        rv = cache.get(cache_key)
+        if rv is None:
+            userInfo = auth.get_userinfo_with_token()
+            rv = userInfo['email']
+            cache.set(cache_key, rv, timeout=60 * 50)
 
-        response = get_transaction_history_for_user_and_product(userEmail, id)
+        response = get_transaction_history_for_user_and_product(rv, id)
         #  I know but if i don't  do this it runs through dumps twice
         resval = json.loads(response)
         return resval, 200
@@ -73,11 +84,17 @@ class TransactionItem(Resource):
     @auth.requires_auth
     @api.expect(transaction)
     def put(self, id):
-        userInfo = auth.get_userinfo_with_token()
-        userEmail = userInfo['email']
+        # userInfo = auth.get_userinfo_with_token()
+        # userEmail = userInfo['email']
+        cache_key = 'auth:' + request.headers.get("Authorization", None)
+        rv = cache.get(cache_key)
+        if rv is None:
+            userInfo = auth.get_userinfo_with_token()
+            rv = userInfo['email']
+            cache.set(cache_key, rv, timeout=60 * 50)
 
         data = request.json
-        record_updated = upsert_transaction(data, userEmail)
+        record_updated = upsert_transaction(data, rv)
         return None, 204
 
     @api.response(204, 'Transaction successfully deleted.')
