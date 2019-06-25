@@ -3,7 +3,7 @@ from api import auth
 # from database.db import get_db
 
 from api.wallet.repositories import balances
-from api.products.repositories import products, prices
+from api.products.repositories import prices, products
 from api.profile.repository.users import get_user
 # from stockklyApi.api.wallet.business import product
 
@@ -46,7 +46,9 @@ def enrichWithPriceData(item, userCcy):
     if item['ccy'] == userCcy:
         item['spot'] = 1
     else:
-        item['spot'] = 1.27
+        spotTicker = userCcy + ":" + item['ccy']
+        spot = prices.get_price_latest(spotTicker)
+        item['spot'] = float(spot['price'])
 
     price = prices.get_price_now(ticker)
     if not price:

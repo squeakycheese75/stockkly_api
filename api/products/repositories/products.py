@@ -9,7 +9,7 @@ def get_product(ticker):
 
 
 def get_sectors():
-    queryresult = mongoDB.db.products.distinct('sector')
+    queryresult = mongoDB.db.products.distinct('sector').sort({'sector': 1})
     return queryresult
 
 
