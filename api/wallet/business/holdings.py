@@ -46,7 +46,7 @@ def enrichWithPriceData(item, userCcy):
     if item['ccy'] == userCcy:
         item['spot'] = 1
     else:
-        item['spot'] = 1.292
+        item['spot'] = 1.27
 
     price = prices.get_price_now(ticker)
     if not price:
