@@ -31,7 +31,11 @@ def calc_change(price, open):
 
 def enrichWithPriceData(item):
     ticker = item['ticker']
+    # price = prices.get_price_now(ticker)
     price = prices.get_price_now(ticker)
+    if not price:
+        price = prices.get_price_latest(ticker)
+
     if price:
         change = calc_change(price['price'], price['open'])
         item['change'] = change
@@ -39,6 +43,12 @@ def enrichWithPriceData(item):
         item['movement'] = calc_movement(change, price['price'])
         item['total_change'] = calc_total_change(item['qty'], change)
         item['total'] = calc_total(item['qty'], price['price'])
+    else:
+        item['change'] = 0
+        item['price'] = 0
+        item['movement'] = 0
+        item['total_change'] = 0
+        item['total'] = 0
 
     # enrich with product data
     product = products.get_product(ticker)
@@ -46,6 +56,10 @@ def enrichWithPriceData(item):
         item['name'] = product['name']
         item['ccy'] = product['quote']['currency']
         item['symbol'] = product['quote']['symbol']
+    else:
+        item['name'] = 'na'
+        item['ccy'] = 'na'
+        item['symbol'] = 'na'
     # enrich with spot is necessary
     # Might do once at ui level...?????
     # if portfolioCcy != accetCcy
