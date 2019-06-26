@@ -38,10 +38,12 @@ def enrichWithPriceData(item, userCcy):
         item['name'] = product['name']
         item['ccy'] = product['quote']['currency']
         item['symbol'] = product['quote']['symbol']
+        item['displayTicker'] = product['displayTicker']
     else:
         item['name'] = 'na'
         item['ccy'] = 'na'
         item['symbol'] = 'na'
+        item['displayTicker'] = ticker
 
     if item['ccy'] == userCcy:
         item['spot'] = 1
@@ -96,7 +98,7 @@ def get_holdings(userId):
 
     for item in queryresult:
         resval.append(enrichWithPriceData(item, userProfile['currency']))
-        print(resval)
+        # print(resval)
     return resval
 
 
