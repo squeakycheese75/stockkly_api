@@ -17,7 +17,8 @@ def get_ticker(ticker):
             "price": price["price"],
             "spot": 0,
             "symbol": product["quote"]["symbol"],
-            "ticker": ticker
+            "ticker": ticker,
+            "displayTicker": product["displayTicker"]
         }
     except:
         response = None
