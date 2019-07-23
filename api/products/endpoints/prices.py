@@ -11,7 +11,10 @@ from api.products.serialisers import price
 import stockkly_repo
 import html
 from cache import cache
+import json
+
 from api.products.repositories.prices import get_price_now
+from api.products.business.prices import get_historical
 
 
 log = logging.getLogger(__name__)
@@ -34,6 +37,26 @@ class PriceItem(Resource):
             rv = get_price_now(unecTicker)
             # rv = get_price_latest(unecTicker)
             cache.set(cache_key, rv, timeout=30)
+        return rv, 200
+
+
+@ns.route('/historical/<string:ticker>')
+@api.response(404, 'Prices not found.')
+class HistoricalPrices(Resource):
+
+    # @api.marshal_with(product)
+    def get(self, ticker):
+        """
+        Returns a list of historical prices for charting
+        """
+        cache_key = 'historicalPrices:' + ticker
+        rv = cache.get(cache_key)
+        if rv is None:
+            response = get_historical(ticker, 30)
+            cache.set(cache_key, rv, timeout=60 * 60)
+            # response = get_transaction_history_for_user(rv)
+            #  I know but if i don't  do this it runs through dumps twice
+            rv = json.loads(response)
         return rv, 200
 
 
