@@ -1,5 +1,5 @@
 from api.products.repositories.products import get_product
-from api.products.repositories.prices import get_price_now
+from api.products.repositories.prices import get_price_now, get_price_trend
 
 
 def get_ticker(ticker):
@@ -8,6 +8,10 @@ def get_ticker(ticker):
         product = get_product(ticker)
         # lookup price
         price = get_price_now(ticker)
+        trend = list(get_price_trend(ticker, 30))
+        tList = []
+        for x in trend:
+            tList.append(x['price'])
         response = {
             "ccy": product["quote"]["currency"],
             "change": price["change"],
@@ -18,7 +22,8 @@ def get_ticker(ticker):
             "spot": 0,
             "symbol": product["quote"]["symbol"],
             "ticker": ticker,
-            "displayTicker": product["displayTicker"]
+            "displayTicker": product["displayTicker"],
+            "trend":  tList
         }
     except:
         response = None

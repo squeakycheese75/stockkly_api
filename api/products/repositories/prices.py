@@ -28,6 +28,17 @@ def get_prices(self, ticker):
     return mongoDB.db.prices.find({'ticker': ticker.upper()})
 
 
+def get_price_trend(ticker, limit):
+    # return mongoDB.db.prices.find({'ticker': ticker.upper()})
+    queryresult = mongoDB.db.prices.find(
+        {'ticker': ticker.upper()},
+        {'_id': 0, 'price': 1, 'priceDate': 1},
+        sort=[('priceDate', 1)],
+        limit=limit
+    )
+    return queryresult
+
+
 # def create_price(data):
 #     queryresult = mongoDB.db.prices.find_one({"ticker": data['ticker'].upper()})
 

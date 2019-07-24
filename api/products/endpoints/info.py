@@ -4,7 +4,8 @@ from flask import request
 from flask_restplus import Resource
 import json
 
-from api.products.repositories.products import get_product, upsert_product, get_products, create_product
+from api.products.repositories.products import upsert_product, get_products, create_product, get_product
+# from api.products.business.product import get
 from api.products.serialisers import product
 
 from api.restplus import api
