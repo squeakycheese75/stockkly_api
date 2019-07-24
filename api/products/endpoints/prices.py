@@ -49,10 +49,11 @@ class HistoricalPrices(Resource):
         """
         Returns a list of historical prices for charting
         """
-        cache_key = 'historicalPrices:' + ticker
+        unecTicker = html.unescape(ticker)
+        cache_key = 'historicalPrices:' + unecTicker
         rv = cache.get(cache_key)
         if rv is None:
-            response = get_historical(ticker, 30)
+            response = get_historical(unecTicker, 30)
             cache.set(cache_key, rv, timeout=60 * 60)
             # response = get_transaction_history_for_user(rv)
             #  I know but if i don't  do this it runs through dumps twice

@@ -46,7 +46,6 @@ class BalanceItem(Resource):
         data = request.json
         userInfo = auth.get_userinfo_with_token()
         userEmail = userInfo['email']
-        # userEmail = 'james_wooltorton@hotmail.com'
         ticker = data['ticker']
         qty = data['qty']
         update_balance(userEmail, ticker, qty)
