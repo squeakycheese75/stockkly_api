@@ -11,7 +11,10 @@ def get_historical(ticker, span):
         # build a list
         l = []
         for x in history:
-            l.append(x)
+            if type(x['price']) is float:
+                l.append(x)
+        if not l:
+            return None
         # convert to dataframe and format for the chart
         df = pd.DataFrame(l)
         df = df.set_index(pd.DatetimeIndex(df['priceDate']).strftime("%Y-%m-%d"))
