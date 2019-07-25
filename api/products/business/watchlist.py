@@ -11,7 +11,10 @@ def get_ticker(ticker):
         trend = list(get_price_trend(ticker, 30))
         tList = []
         for x in trend:
-            tList.append(x['price'])
+            # tList.append(x['price'])
+            # I polluted the data with strings.  This is to filter them out.
+            if type(x['price']) is float:
+                tList.append(x['price'])
         response = {
             "ccy": product["quote"]["currency"],
             "change": price["change"],
