@@ -46,9 +46,6 @@ class HoldingItem(Resource):
         """
         Returns list of Holdings
         # """
-        # userInfo = auth.get_userinfo_with_token()
-        # userEmail = userInfo['email']
-        # userEmail = "james_wooltorton@hotmail.com"
         cache_key = 'auth:' + request.headers.get("Authorization", None)
         rv = cache.get(cache_key)
         if rv is None:
