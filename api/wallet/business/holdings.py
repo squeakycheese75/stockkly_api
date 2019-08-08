@@ -68,17 +68,24 @@ def enrichWithPriceData(item, userCcy):
         spot = prices.get_price_latest(spotTicker)
         item['spot'] = float(spot['price'])
 
-    price = prices.get_price_now(ticker)
-    if not price:
-        price = prices.get_price_latest(ticker)
+    priceEntity = prices.get_price_now(ticker)
+    if not priceEntity:
+        priceEntity = prices.get_price_latest(ticker)
+
+    price = priceEntity['price']
+    open = priceEntity['open']
+
+    if product['sector'] == 'Fund':
+        previousPrice = prices.get_price_previous(ticker, priceEntity['priceDate'])
+        open = previousPrice['price']
 
     if price:
-        change = calc_change(price['price'], price['open'])
+        change = calc_change(price, open)
         item['change'] = change
-        item['price'] = price['price']
-        item['movement'] = calc_movement(change, price['price'])
+        item['price'] = price
+        item['movement'] = calc_movement(change, price)
         item['total_change'] = (calc_total_change(item['qty'], change) / item['spot'])
-        item['total'] = (calc_total(item['qty'], price['price']) / item['spot'])
+        item['total'] = (calc_total(item['qty'], price) / item['spot'])
     else:
         item['change'] = 0
         item['price'] = 0
