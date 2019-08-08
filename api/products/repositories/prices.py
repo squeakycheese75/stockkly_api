@@ -24,6 +24,11 @@ def get_price(ticker, price_date):
     return mongoDB.db.prices.find_one({'ticker': ticker.upper(), 'priceDate': price_date})
 
 
+def get_price_previous(ticker, price_date):
+    queryresult = mongoDB.db.prices.find_one({'ticker':  ticker.upper(), 'priceDate': {'$lt': price_date}},  sort=[('priceDate', -1)])
+    return queryresult
+
+
 def get_prices(self, ticker):
     return mongoDB.db.prices.find({'ticker': ticker.upper()})
 
