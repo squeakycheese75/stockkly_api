@@ -37,18 +37,11 @@ CORS(app)
 
 # CORS(app, expose_headers='Authorization', supports_credentials=True)
 
-# api = Api(app)  # Create a Flask-RESTPlus API
-
 
 def initialize_app(flask_app):
-
-    # configure_app(flask_app)
-    # cache.init_app(app)
-    # cache = Cache(app, config={'CACHE_TYPE': 'simple'})
-    # cache = Cache(app, config={'CACHE_TYPE': 'simple'})
     blueprint = Blueprint('api', __name__, url_prefix='/api')
     api.init_app(flask_app)
-    api.init_app(blueprint)
+    # api.init_app(blueprint)
     # app.register_blueprint(blueprint)
     api.add_namespace(wallet_holdings_namespace)
     api.add_namespace(wallet_transactions_namespace)
@@ -66,8 +59,8 @@ def initialize_app(flask_app):
     mongoDB.init_app(app)
 
 
-# def main():
-initialize_app(app)
+def main():
+    initialize_app(app)
 # log.info('RUnning')
 # log.info('>>>>> Starting development server at http://{}/api/ <<<<<'.format(app.config['SERVER_NAME']))
 # app.run(debug=settings.FLASK_DEBUG)
@@ -76,4 +69,4 @@ initialize_app(app)
 
 
 # if __name__ == "__main__":
-#     main()
+main()
