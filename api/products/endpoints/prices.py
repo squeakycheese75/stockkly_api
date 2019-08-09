@@ -55,16 +55,6 @@ class HistoricalPrices(Resource):
         if rv is None:
             response = get_historical(unecTicker, 30)
             cache.set(cache_key, rv, timeout=60 * 60)
-            # response = get_transaction_history_for_user(rv)
-            #  I know but if i don't  do this it runs through dumps twice
-            # rv = json.loads(response)
-            # x: ["2018-06-30", "2018-07-31", "2018-08-31", "2019-04-30"],
-            # y: [22.3, 22.4, 22.1, 20.9],
-            # x1 = {"2018-06-30": 22.3}
-            # x2 = {"2018-07-31":  22.4}
-            # x3 = {"2018-08-31": 22.1}
-            # x4 = {"2019-04-30":  20.9}
-            # rv = [x1, x2, x3, x4]
             rv = response
         return rv, 200
 
