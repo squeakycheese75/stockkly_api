@@ -40,8 +40,8 @@ CORS(app)
 
 def initialize_app(flask_app):
     blueprint = Blueprint('api', __name__, url_prefix='/api')
-    api.init_app(flask_app)
-    # api.init_app(blueprint)
+    # api.init_app(flask_app)
+    api.init_app(blueprint)
     # app.register_blueprint(blueprint)
     api.add_namespace(wallet_holdings_namespace)
     api.add_namespace(wallet_transactions_namespace)
