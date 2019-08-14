@@ -34,11 +34,19 @@ logging_conf_path = os.path.normpath(os.path.join(os.path.dirname(__file__), 'lo
 logging.config.fileConfig(logging_conf_path)
 log = logging.getLogger(__name__)
 CORS(app)
+# api = Api(app)
 
 # CORS(app, expose_headers='Authorization', supports_credentials=True)
 
 
+def configure_app(flask_app):
+    # flask_app.config['SERVER_NAME'] = settings.FLASK_SERVER_NAME
+    flask_app.config["MONGO_URI"] = MONGO_CONNECTION
+
+
 def initialize_app(flask_app):
+    configure_app(flask_app)
+
     blueprint = Blueprint('api', __name__, url_prefix='/api')
     # api.init_app(flask_app)
     api.init_app(blueprint)
