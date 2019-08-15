@@ -15,6 +15,7 @@ def get_ticker(ticker):
             # I polluted the data with strings.  This is to filter them out.
             if type(x['price']) is float:
                 tList.append(x['price'])
+        tList.reverse()
         response = {
             "ccy": product["quote"]["currency"],
             "change": price["change"],
