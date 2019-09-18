@@ -13,13 +13,13 @@ import html
 from cache import cache
 import json
 
-from api.products.repositories.prices import get_price_now
+from api.products.repositories.prices import get_price_latest, get_price_now
 from api.products.business.prices import get_historical
 
 
 log = logging.getLogger(__name__)
 
-ns = api.namespace('products/prices', description='Operations related to Prices sectors')
+ns = api.namespace('prices', description='Operations related to Prices sectors')
 
 
 @ns.route('/<string:ticker>')
@@ -34,29 +34,29 @@ class PriceItem(Resource):
         cache_key = 'price:' + unecTicker
         rv = cache.get(cache_key)
         if rv is None:
-            rv = get_price_now(unecTicker)
+            rv = get_price_latest(unecTicker)
             # rv = get_price_latest(unecTicker)
             cache.set(cache_key, rv, timeout=30)
         return rv, 200
 
 
-@ns.route('/historical/<string:ticker>')
-@api.response(404, 'Prices not found.')
-class HistoricalPrices(Resource):
+# @ns.route('/historical/<string:ticker>')
+# @api.response(404, 'Prices not found.')
+# class HistoricalPrices(Resource):
 
-    # @api.marshal_with(product)
-    def get(self, ticker):
-        """
-        Returns a list of historical prices for charting
-        """
-        unecTicker = html.unescape(ticker)
-        cache_key = 'historicalPrices:' + unecTicker
-        rv = cache.get(cache_key)
-        if rv is None:
-            response = get_historical(unecTicker, 30)
-            cache.set(cache_key, rv, timeout=60 * 60)
-            rv = response
-        return rv, 200
+#     # @api.marshal_with(product)
+#     def get(self, ticker):
+#         """
+#         Returns a list of historical prices for charting
+#         """
+#         unecTicker = html.unescape(ticker)
+#         cache_key = 'historicalPrices:' + unecTicker
+#         rv = cache.get(cache_key)
+#         if rv is None:
+#             response = get_historical(unecTicker, 30)
+#             cache.set(cache_key, rv, timeout=60 * 60)
+#             rv = response
+#         return rv, 200
 
 
 # # @auth.requires_auth

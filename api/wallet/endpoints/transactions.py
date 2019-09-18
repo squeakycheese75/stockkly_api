@@ -4,6 +4,7 @@ from flask_restplus import Resource
 import json
 import logging
 import datetime
+# from bson import json_util
 
 from api import auth
 from database.db import get_db
@@ -16,7 +17,7 @@ from api.restplus import api
 
 log = logging.getLogger(__name__)
 
-ns = api.namespace('wallet/transactions', description='Operations related to wallet Transactions')
+ns = api.namespace('transactions', description='Operations related to wallet Transactions')
 
 
 @ns.route('/')
@@ -39,10 +40,27 @@ class TransactionCollection(Resource):
             rv = userInfo['email']
             cache.set(cache_key, rv, timeout=60 * 50)
 
-        response = get_transaction_history_for_user(rv)
+        cursor = get_transaction_history_for_user(rv)
+        # .map(function(doc) {
+    #     return {'id': doc._id.str}
+    # })
+        # for document in cursor:
+        #     print(document['_id'])
+        # document['id'] = document['id'].str
+        res = []
+        for document in json.loads(cursor):
+            doc = str(document["_id"]['$oid'])
+            # print(doc)
+            # print(type(doc))
+            document['id'] = doc
+            res.append(document)
+        # response_santized = json.loads(json_util.dumps(response))
         #  I know but if i don't  do this it runs through dumps twice
-        resval = json.loads(response)
-        return resval, 200
+        # resval = json.loads(json.dumps(document))
+        # print("documet", res)
+        # resval = json.loads(cursor)
+        # print("resval", resval)
+        return res, 200
 
     @api.response(201, 'Transaction successfully created.')
     @api.expect(transaction)
@@ -94,8 +112,8 @@ class TransactionItem(Resource):
             cache.set(cache_key, rv, timeout=60 * 50)
 
         data = request.json
-        record_updated = upsert_transaction(data, rv)
-        return None, 204
+        # record_updated = upsert_transaction(data, rv)
+        return {'task': 'Hello world'}, 204
 
     @api.response(204, 'Transaction successfully deleted.')
     def delete(self, id):

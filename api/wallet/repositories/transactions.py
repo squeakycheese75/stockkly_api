@@ -24,7 +24,11 @@ def get_transaction_history_for_user_and_product(userId, ticker):
 def get_transaction_history_for_user(userId):
     # db = get_db()['stockkly']
     # user_collection = db['transactions']
+    #     db.getCollection('example').find({"example":1},{"_id":1}).map(function(doc) {
+    #     return {'id': doc._id.str }
+    # })
 
+    # queryresult = mongoDB.db.transactions.find({"owner": userId})
     queryresult = mongoDB.db.transactions.find({"owner": userId})
 
     json_results = json_util.dumps(queryresult)

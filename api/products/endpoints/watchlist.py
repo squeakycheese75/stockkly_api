@@ -14,7 +14,7 @@ ns = api.namespace('watchlist', description='Operations related to Watchlist')
 
 
 @ns.route('/<string:tickers>')
-@api.response(404, 'Prices not found.')
+@api.response(404, 'Watchlist items not found.')
 class WatchListItem(Resource):
     # @api.marshal_with(price)
     def get(self, tickers):
