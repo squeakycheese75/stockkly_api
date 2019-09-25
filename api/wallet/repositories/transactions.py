@@ -5,7 +5,7 @@ import json
 from bson import json_util
 from bson.objectid import ObjectId
 from mongo import mongoDB
-
+# from bson.objectid import ObjectId
 
 # from bson.json_util import dumps
 
@@ -55,7 +55,8 @@ def create_transaction(data, userId):
 def upsert_transaction(data, userId):
     # db = get_db()['stockkly']
     # trans_collection = db['transactions']
-    mongoId = data['_id']
+    mongoId = ObjectId(data['id'])
+    # mongoId = data['_id']
 
     trans = {
         "owner": userId,
@@ -67,3 +68,8 @@ def upsert_transaction(data, userId):
         'details': data['details'],
     }
     return mongoDB.db.transactions.update_one({'_id': mongoId}, {"$set": trans}, upsert=True)
+
+
+def delete_transaction(id):
+    mongoId = ObjectId(id)
+    return mongoDB.db.transactions.delete_one({'_id': mongoId})

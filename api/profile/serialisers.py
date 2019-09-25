@@ -26,7 +26,7 @@ user = api.model('User', {
     # 'watching': fields.List(fields.String),
     # 'settings': fields.List(fields.Nested(profileSettings)),
     # 'id': fields.Integer,
-    '_id': fields.String,
+    'id': fields.String,
     'currency': fields.String,
     'symbol': fields.String,
     'refreshRate': fields.Integer,

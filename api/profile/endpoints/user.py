@@ -26,7 +26,9 @@ class ProductCollection(Resource):
         userInfo = auth.get_userinfo_with_token()
         userEmail = userInfo['email']
 
+        # cursor = get_transaction_history_for_user(rv)
         response = get_user(userEmail)
+        print(response)
         if response is None:
             # Create new profile with defaults
             response = {
@@ -36,6 +38,8 @@ class ProductCollection(Resource):
                 "refreshRate": 30
             }
             create_user(response, userEmail)
+        else:
+            response['id'] = str(response["_id"])
         return response, 200
 
     @api.response(201, 'Profile successfully created.')

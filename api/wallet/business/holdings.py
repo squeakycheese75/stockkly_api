@@ -48,6 +48,7 @@ def calc_change(price, open):
 
 def enrichWithPriceData(item, userCcy):
     ticker = item['ticker']
+    print(ticker)
     # enrich with product data
     product = products.get_product(ticker)
     if product:
@@ -66,14 +67,17 @@ def enrichWithPriceData(item, userCcy):
     else:
         spotTicker = userCcy + ":" + item['ccy']
         spot = prices.get_price_latest(spotTicker)
-        item['spot'] = float(spot['price'])
+        if spot is None:
+            item['spot'] = 1
+        else:
+            item['spot'] = float(spot['price'])
 
     priceEntity = prices.get_price_now(ticker)
     if not priceEntity:
         priceEntity = prices.get_price_latest(ticker)
 
-    price = priceEntity['price']
-    open = priceEntity['open']
+    price = float(priceEntity['price'])
+    open = float(priceEntity['open'])
 
     if product['sector'] == 'Fund':
         previousPrice = prices.get_price_previous(ticker, priceEntity['priceDate'])

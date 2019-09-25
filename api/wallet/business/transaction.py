@@ -11,12 +11,12 @@ def create_transaction(data, userId):
     # transactionRepo.create_transaction(data)
     response = transactionRepo.create_transaction(data, userId)
 
-    update_balance(userId, data['ticker'], data['quantity'])
+    # update_balance(userId, data['ticker'], data['quantity'])
     return response
 
 
 def upsert_transaction(data, userId):
     response = transactionRepo.upsert_transaction(data, userId)
 
-    update_balance(userId, data['ticker'], data['quantity'])
+    # update_balance(userId, data['ticker'], data['quantity'])
     return response
