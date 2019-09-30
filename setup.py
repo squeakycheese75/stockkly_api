@@ -2,8 +2,8 @@ from setuptools import setup, find_packages
 
 setup(
     name='stockkly_api',
-    version='1.0.0',
-    description='Code for a RESTful API based',
+    version='1.1.0',
+    description='Code for Stockkly RESTful API based',
     url='https://github.com/squeakycheese75/stockklyApi',
     author='Jamie Wooltorton',
 
