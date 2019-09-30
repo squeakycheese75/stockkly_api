@@ -20,6 +20,7 @@ from api.wallet.endpoints.balances import ns as wallet_balances_namespace
 from api.products.endpoints.info import ns as product_info_namespace
 from api.products.endpoints.sectors import ns as product_sectors_namespace
 from api.products.endpoints.prices import ns as product_prices_namespace
+from api.products.endpoints.pricesHistorical import ns as pricesHistorical_namespace
 from api.profile.endpoints.user import ns as profile_users_namespace
 from api.products.endpoints.watchlist import ns as product_watchlist_namespace
 
@@ -59,6 +60,7 @@ def initialize_app(flask_app):
     api.add_namespace(product_prices_namespace)
     api.add_namespace(profile_users_namespace)
     api.add_namespace(product_watchlist_namespace)
+    api.add_namespace(pricesHistorical_namespace)
 
     # api.add_namespace(transactions_api)
     flask_app.register_blueprint(blueprint)
@@ -68,13 +70,12 @@ def initialize_app(flask_app):
 
 
 def main():
-    initialize_app(app)
-# log.info('RUnning')
-# log.info('>>>>> Starting development server at http://{}/api/ <<<<<'.format(app.config['SERVER_NAME']))
-# app.run(debug=settings.FLASK_DEBUG)
-# app.run(host=settings.FLASK_HOST, port=settings.FLASK_PORT,
-#         debug=settings.FLASK_DEBUG)
+    log.info('Running')
+    log.info('>>>>> Starting development server at http://{}/api/ <<<<<'.format(app.config['SERVER_NAME']))
+    app.run(host=settings.FLASK_HOST, port=settings.FLASK_PORT,
+            debug=settings.FLASK_DEBUG, threaded=True)
 
 
-# if __name__ == "__main__":
-main()
+initialize_app(app)
+if __name__ == "__main__":
+    main()
