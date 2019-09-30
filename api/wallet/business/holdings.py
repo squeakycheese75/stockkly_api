@@ -5,13 +5,8 @@ from api import auth
 from api.wallet.repositories import balances
 from api.products.repositories import prices, products
 from api.profile.repository.users import get_user
-# from stockklyApi.api.wallet.business import product
-
+from api.wallet.repositories.transactions import get_transaction_history_for_user_and_product
 from bson import json_util
-# from bson.objectid import ObjectId
-
-# need some tests....:)
-# Increase ÷ Original Number × 100.
 
 
 def calc_movement(increase, price):
@@ -48,6 +43,7 @@ def calc_change(price, open):
 
 def enrichWithPriceData(item, userCcy):
     ticker = item['ticker']
+    print(ticker)
     # enrich with product data
     product = products.get_product(ticker)
     if product:
@@ -66,14 +62,17 @@ def enrichWithPriceData(item, userCcy):
     else:
         spotTicker = userCcy + ":" + item['ccy']
         spot = prices.get_price_latest(spotTicker)
-        item['spot'] = float(spot['price'])
+        if spot is None:
+            item['spot'] = 1
+        else:
+            item['spot'] = float(spot['price'])
 
     priceEntity = prices.get_price_now(ticker)
     if not priceEntity:
         priceEntity = prices.get_price_latest(ticker)
 
-    price = priceEntity['price']
-    open = priceEntity['open']
+    price = float(priceEntity['price'])
+    open = float(priceEntity['open'])
 
     if product['sector'] == 'Fund':
         previousPrice = prices.get_price_previous(ticker, priceEntity['priceDate'])
@@ -109,6 +108,21 @@ def get_holding(userId, ticker):
     return resval
 
 
+def calculate_balance(userId, ticker):
+    transactions = get_transaction_history_for_user_and_product(userId, ticker)
+    balance = {
+        'ticker': ticker,
+        'userId': userId,
+        'qty': 0
+    }
+    for item in transactions:
+        if item['transtype'].upper() == "BUY":
+            balance['qty'] += float(item['quantity'])
+        else:
+            balance['qty'] -= float(item['quantity'])
+    return balance
+
+
 def get_holdings(userId):
 
     userProfile = get_user(userId)
@@ -120,8 +134,9 @@ def get_holdings(userId):
     resval = []
 
     for item in queryresult:
-        resval.append(enrichWithPriceData(item, userProfile['currency']))
-        # print(resval)
+        quantity = item['qty']
+        if quantity != 0:
+            resval.append(enrichWithPriceData(item, userProfile['currency']))
     return resval
 
 
@@ -132,11 +147,13 @@ def update_balance(userId, ticker, qty):
         data = {
             'ticker': ticker,
             'userId': userId,
-            'qty': qty
+            'qty': float(qty)
         }
         response = balances.create_balance(userId, data)
     else:
-        old_qty = holding['qty']
-        new_qty = old_qty + qty
-        response = balances.update_balance(userId, ticker, new_qty)
+        # old_qty = float(holding['qty'])
+        # new_qty = old_qty + float(qty)
+        # response = balances.update_balance(userId, ticker, new_qty)
+        new_balance = calculate_balance(userId, ticker)
+        response = balances.update_balance(userId, ticker, new_balance['qty'])
     return response
