@@ -1,6 +1,6 @@
 # Flask settings
 # FLASK_SERVER_NAME = 'localhost:8888'
-FLASK_DEBUG = True  # Do not use debug mode in production
+FLASK_DEBUG = False  # Do not use debug mode in production
 FLASK_HOST = '0.0.0.0'
 FLASK_PORT = '5000'
 
