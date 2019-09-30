@@ -10,9 +10,9 @@ from datetime import date
 
 from api import auth
 from database.db import get_db
-from api.wallet.repositories.transactions import get_transaction_history_for_user_and_product, get_transaction_history_for_user, delete_transaction
+from api.wallet.repositories.transactions import get_transaction_history_for_user_and_product, get_transaction_history_for_user
 from api.wallet.serializers import transaction
-from api.wallet.business.transaction import upsert_transaction, create_transaction
+from api.wallet.business.transaction import upsert_transaction, create_transaction, delete_transaction
 from cache import cache
 
 from api.restplus import api
@@ -94,8 +94,8 @@ class TransactionItem(Resource):
 
         response = get_transaction_history_for_user_and_product(rv, id)
         #  I know but if i don't  do this it runs through dumps twice
-        resval = json.loads(response)
-        return resval, 200
+        # resval = json.loads(response)
+        return response, 200
 
     @auth.requires_auth
     @api.expect(transaction)
@@ -114,6 +114,7 @@ class TransactionItem(Resource):
         # return None, 204
         return data, 200
 
+    @auth.requires_auth
     @api.response(204, 'Transaction successfully deleted.')
     def delete(self, id):
 
@@ -125,5 +126,6 @@ class TransactionItem(Resource):
             cache.set(cache_key, rv, timeout=60 * 50)
 
         data = request.json
-        record_deleted = delete_transaction(id)
-        return data, 204
+        delete_transaction(rv, id)
+        # need to update th holdings
+        return None, 204

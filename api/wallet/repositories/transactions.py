@@ -13,26 +13,21 @@ import datetime
 
 
 def get_transaction_history_for_user_and_product(userId, ticker):
-    # db = get_db()['stockkly']
-    # user_collection = db['transactions']
-
     queryresult = mongoDB.db.transactions.find({"owner": userId, "ticker": ticker.upper()})
-    json_results = json_util.dumps(queryresult)
-    return json_results
+    # json_results = json_util.dumps(queryresult)
+    return queryresult
 
 
 def get_transaction_history_for_user(userId):
-    # db = get_db()['stockkly']
-    # user_collection = db['transactions']
-    #     db.getCollection('example').find({"example":1},{"_id":1}).map(function(doc) {
-    #     return {'id': doc._id.str }
-    # })
-
-    # queryresult = mongoDB.db.transactions.find({"owner": userId})
     queryresult = mongoDB.db.transactions.find({"owner": userId})
 
     json_results = json_util.dumps(queryresult)
     return(json_results)
+
+
+def get_transaction_by_id(id):
+    resval = mongoDB.db.transactions.find_one({"_id": ObjectId(id)})
+    return(resval)
 
 
 def create_transaction(data, userId):
@@ -53,10 +48,7 @@ def create_transaction(data, userId):
 
 
 def upsert_transaction(data, userId):
-    # db = get_db()['stockkly']
-    # trans_collection = db['transactions']
     mongoId = ObjectId(data['id'])
-    # mongoId = data['_id']
 
     trans = {
         "owner": userId,
@@ -72,4 +64,5 @@ def upsert_transaction(data, userId):
 
 def delete_transaction(id):
     mongoId = ObjectId(id)
+    # print(mongoId)
     return mongoDB.db.transactions.delete_one({'_id': mongoId})
