@@ -28,7 +28,7 @@ class ProductCollection(Resource):
 
         # cursor = get_transaction_history_for_user(rv)
         response = get_user(userEmail)
-        print(response)
+        # print(response)
         if response is None:
             # Create new profile with defaults
             response = {
@@ -55,21 +55,6 @@ class ProductCollection(Resource):
         data = request.json
         create_user(data, userEmail)
         return None, 201
-
-
-# @ns.route('/<string:id>')
-# @api.response(404, 'Product not found.')
-# class ProductItem(Resource):
-
-#     @api.marshal_with(product)
-#     def get(self, id):
-#         """
-#         Returns list of Product
-#         """
-#         response = get_product(id)
-#         return response, 200
-
-    # @api.response(204, 'Profile successfully updated.')
 
     @auth.requires_auth
     @api.expect(user)
