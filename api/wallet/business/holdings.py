@@ -43,7 +43,7 @@ def calc_change(price, open):
 
 def enrichWithPriceData(item, userCcy):
     ticker = item['ticker']
-    print(ticker)
+    # print(ticker)
     # enrich with product data
     product = products.get_product(ticker)
     if product:
