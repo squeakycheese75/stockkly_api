@@ -31,17 +31,13 @@ def get_transaction_by_id(id):
 
 
 def create_transaction(data, userId):
-    # db = get_db()['stockkly']
-    # transactionsCollection = db['transactions']
-
-    # handle empty lists
     trans = {
         "owner": userId,
         'ticker': data['ticker'].upper(),
         'transdate': data['transdate'],
         'transtype': data['transtype'],
-        'quantity': data['quantity'],
-        'price': data['price'],
+        'quantity': float(data['quantity']),
+        'price': float(data['price']),
         'details': data['details'],
     }
     return mongoDB.db.transactions.insert_one(trans)
@@ -55,14 +51,12 @@ def upsert_transaction(data, userId):
         'ticker': data['ticker'].upper(),
         'transdate': data['transdate'],
         'transtype': data['transtype'],
-        'quantity': data['quantity'],
-        'price': data['price'],
+        'quantity': float(data['quantity']),
+        'price': float(data['price']),
         'details': data['details'],
     }
     return mongoDB.db.transactions.update_one({'_id': mongoId}, {"$set": trans}, upsert=True)
 
 
 def delete_transaction(id):
-    mongoId = ObjectId(id)
-    # print(mongoId)
-    return mongoDB.db.transactions.delete_one({'_id': mongoId})
+    return mongoDB.db.transactions.delete_one({'_id': ObjectId(id)})
