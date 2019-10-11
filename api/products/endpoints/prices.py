@@ -14,7 +14,7 @@ from cache import cache
 import json
 
 from api.products.repositories.prices import get_price_latest, get_price_now
-from api.products.business.prices import get_historical
+from api.products.business.prices import get_historical, get_price
 
 
 log = logging.getLogger(__name__)
@@ -34,7 +34,8 @@ class PriceItem(Resource):
         cache_key = 'price:' + unecTicker
         rv = cache.get(cache_key)
         if rv is None:
-            rv = get_price_latest(unecTicker)
+            # rv = get_price_latest(unecTicker)
+            rv = get_price(unecTicker)
             # rv = get_price_latest(unecTicker)
             cache.set(cache_key, rv, timeout=30)
         return rv, 200
