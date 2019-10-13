@@ -3,7 +3,7 @@ import json
 
 
 from api.products.repositories.products import get_product
-from api.products.repositories.prices import get_price_now, get_price_trend
+from api.products.repositories.prices import get_price_now, get_price_trend, get_price_latest
 
 
 def get_historical(ticker, span):
@@ -29,4 +29,16 @@ def get_historical(ticker, span):
         response = rv['price']
     except:
         response = None
+    return response
+
+
+def get_price(ticker):
+
+    response = get_price_latest(ticker)
+
+    product = get_product(ticker)
+    if product:
+        response['symbol'] = product['quote']['symbol']
+        response['displayTicker'] = product['displayTicker']
+
     return response

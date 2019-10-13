@@ -38,5 +38,6 @@ price = api.model('Price', {
     'change': fields.Float,
     'price':  fields.Float,
     'movement':  fields.Float,
-    'priceDate': fields.DateTime
+    'priceDate': fields.DateTime,
+    'symbol': fields.String
 })
