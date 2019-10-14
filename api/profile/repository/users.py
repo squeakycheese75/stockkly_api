@@ -15,7 +15,8 @@ def create_user(data, userId):
             "watchList": data['watchList'],
             "currency": data['currency'],
             "symbol": data['symbol'],
-            "refreshRate": data['refreshRate']
+            "refreshRate": data['refreshRate'],
+            "devmode": False
         }
         mongoDB.db.users.insert_one(user)
     return
@@ -26,6 +27,7 @@ def upsert_user(data, userId):
         "watchList": data['watchList'],
         "currency": data['currency'],
         "symbol": data['symbol'],
-        "refreshRate": data['refreshRate']
+        "refreshRate": data['refreshRate'],
+        "devmode": data['devmode']
     }
     return mongoDB.db.users.update_one({'userId': userId}, {"$set": user}, upsert=True)

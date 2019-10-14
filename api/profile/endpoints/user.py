@@ -19,7 +19,7 @@ default_ticker = []
 
 
 @ns.route('/')
-class ProductCollection(Resource):
+class ProfileCollection(Resource):
     @api.marshal_list_with(user)
     @auth.requires_auth
     def get(self):
@@ -35,11 +35,13 @@ class ProductCollection(Resource):
                 "watchList": default_ticker,
                 "currency": "GBP",
                 "symbol": "£",
-                "refreshRate": 30
+                "refreshRate": 30,
+                "devmode": False
             }
             create_user(response, userEmail)
         else:
             response['id'] = str(response["_id"])
+
         return response, 200
 
     @api.response(201, 'Profile successfully created.')
