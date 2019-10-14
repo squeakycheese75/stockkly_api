@@ -11,25 +11,21 @@ from api.restplus import api
 #             raise MarshallingError()
 
 
-profileSettings = api.model('ProfileSettings', {
-    # 'id': fields.Integer,
-    '_id': fields.String,
-    'name': fields.String,
-    'currency': fields.String,
-    'symbol': fields.String,
-    'refreshRate': fields.Integer,
-    'watchList': fields.List(fields.String)
-})
+# profileSettings = api.model('ProfileSettings', {
+#     '_id': fields.String,
+#     'name': fields.String,
+#     'currency': fields.String,
+#     'symbol': fields.String,
+#     'refreshRate': fields.Integer,
+#     'watchList': fields.List(fields.String),
+#     'devmode': fields.boolean
+# })
 
 user = api.model('User', {
-    # 'userId': fields.String,
-    # 'watching': fields.List(fields.String),
-    # 'settings': fields.List(fields.Nested(profileSettings)),
-    # 'id': fields.Integer,
     'id': fields.String,
     'currency': fields.String,
     'symbol': fields.String,
     'refreshRate': fields.Integer,
     'watchList': fields.List(fields.String),
-
+    'devmode': fields.Boolean
 })
