@@ -4,10 +4,8 @@ from flask import request, Response
 from flask_restplus import Resource
 import json
 
-
 from api.profile.repository.users import get_user, create_user, upsert_user
 from api.profile.serialisers import user
-
 from api.restplus import api
 from api import auth
 
