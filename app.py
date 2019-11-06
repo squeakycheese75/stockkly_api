@@ -14,6 +14,7 @@ from api.restplus import api
 from cache import cache
 from mongo import mongoDB
 # from werkzeug.middleware.proxy_fix import ProxyFix
+from werkzeug.contrib.fixers import ProxyFix
 
 from api.products.endpoints.prices import ns as product_prices_namespace
 from api.products.endpoints.pricesHistorical import ns as pricesHistorical_namespace
@@ -29,12 +30,13 @@ if ENV_FILE:
     load_dotenv(ENV_FILE)
 MONGO_CONNECTION = env.get("MONGO_CONNECTION")
 app = Flask(__name__)
+app.wsgi_app = ProxyFix(app.wsgi_app)
 
 app.config["MONGO_URI"] = MONGO_CONNECTION
 logging_conf_path = os.path.normpath(os.path.join(os.path.dirname(__file__), 'logging.conf'))
 logging.config.fileConfig(logging_conf_path)
 log = logging.getLogger(__name__)
-CORS(app)
+CORS(app, )
 # api = Api(app)
 
 # CORS(app, expose_headers='Authorization', supports_credentials=True)
