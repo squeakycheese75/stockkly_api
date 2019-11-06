@@ -58,15 +58,15 @@ class HoldingItem(Resource):
 
 
 # @api.marshal_list_with(holding)
-# @auth.requires_auth
+@auth.requires_auth
 @ns.route('/historical/')
 class HistoricalHoldings(Resource):
     def get(self):
-        # cache_key = 'auth:' + request.headers.get("Authorization", None)
-        # rv = cache.get(cache_key)
-        # if rv is None:
-        #     userInfo = auth.get_userinfo_with_token()
-        #     rv = userInfo['email']
-        #     cache.set(cache_key, rv, timeout=60 * 50)
+        cache_key = 'auth:' + request.headers.get("Authorization", None)
+        rv = cache.get(cache_key)
+        if rv is None:
+            userInfo = auth.get_userinfo_with_token()
+            rv = userInfo['email']
+            cache.set(cache_key, rv, timeout=60 * 50)
         response = get_holdings_historical("test")
         return response, 200
