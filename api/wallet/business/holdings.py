@@ -1,7 +1,6 @@
-
+import pandas as pd
+import json
 from api import auth
-# from database.db import get_db
-
 from api.wallet.repositories import balances
 from api.products.repositories import prices, products
 from api.profile.repository.users import get_user
@@ -39,6 +38,21 @@ def calc_change(price, open):
     if open is None:
         return 0
     return (price - open)
+
+
+def calculate_balance(userId, ticker):
+    transactions = get_transaction_history_for_user_and_product(userId, ticker)
+    balance = {
+        'ticker': ticker,
+        'userId': userId,
+        'qty': 0
+    }
+    for item in transactions:
+        if item['transtype'].upper() == "BUY":
+            balance['qty'] += float(item['quantity'])
+        else:
+            balance['qty'] -= float(item['quantity'])
+    return balance
 
 
 def enrichWithPriceData(item, userCcy):
@@ -108,21 +122,6 @@ def get_holding(userId, ticker):
     return resval
 
 
-def calculate_balance(userId, ticker):
-    transactions = get_transaction_history_for_user_and_product(userId, ticker)
-    balance = {
-        'ticker': ticker,
-        'userId': userId,
-        'qty': 0
-    }
-    for item in transactions:
-        if item['transtype'].upper() == "BUY":
-            balance['qty'] += float(item['quantity'])
-        else:
-            balance['qty'] -= float(item['quantity'])
-    return balance
-
-
 def get_holdings(userId):
 
     userProfile = get_user(userId)
@@ -138,6 +137,36 @@ def get_holdings(userId):
         if quantity != 0:
             resval.append(enrichWithPriceData(item, userProfile['currency']))
     return resval
+
+
+def get_holdings_historical(userId):
+    # userProfile = get_user(userId)
+
+    # currentBalances = balances.get_balances(userId)
+
+    # resval = ""
+    # for item in currentBalances:
+    #     quantity = item['qty']
+        # if quantity != 0:
+    df = pd.DataFrame(columns=["balance", "balanceDate"], data=[
+        [10000.00, '2019-11-01'],
+        [9000.00, '2019-10-01'],
+        [11000.99, '2019-09-01'],
+        [8666.99, '2019-08-01'],
+        [7999.99, '2019-07-01'],
+        [8200.00, '2019-06-01'],
+        [9000.00, '2019-05-01'],
+        [10600.99, '2019-04-01'],
+        [8666.99, '2019-03-01'],
+        [7999.99, '2019-02-01'],
+        [9779.99, '2019-01-01']
+    ])
+    df = df.set_index(pd.DatetimeIndex(df['balanceDate']).strftime("%Y-%m-%d"))
+    resval = df.drop('balanceDate', axis=1)
+    response = resval.to_json(date_format='iso')
+    rv = json.loads(response)
+    response2 = rv['balance']
+    return response2
 
 
 def update_balance(userId, ticker, qty):
@@ -157,3 +186,19 @@ def update_balance(userId, ticker, qty):
         new_balance = calculate_balance(userId, ticker)
         response = balances.update_balance(userId, ticker, new_balance['qty'])
     return response
+
+
+# def get_historical_holdings():
+    # userProfile = get_user(userId)
+
+    # queryresult = balances.get_balances(userId)
+
+    # if queryresult.count() == 0:
+    #     return "No Results"
+    # resval = []
+
+    # for item in queryresult:
+    #     quantity = item['qty']
+    #     if quantity != 0:
+    #         resval.append(enrichWithPriceData(item, userProfile['currency']))
+    # return resval

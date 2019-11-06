@@ -13,6 +13,7 @@ from api.restplus import api
 
 from cache import cache
 from mongo import mongoDB
+# from werkzeug.middleware.proxy_fix import ProxyFix
 
 from api.products.endpoints.prices import ns as product_prices_namespace
 from api.products.endpoints.pricesHistorical import ns as pricesHistorical_namespace
@@ -21,16 +22,14 @@ from api.profile.endpoints.user import ns as profile_users_namespace
 from api.wallet.endpoints.transactions import ns as wallet_transactions_namespace
 from api.wallet.endpoints.holdings import ns as wallet_holdings_namespace
 from api.products.endpoints.watchlist import ns as product_watchlist_namespace
-# from api.wallet.endpoints.balances import ns as wallet_balances_namespace
-# from api.products.endpoints.sectors import ns as product_sectors_namespace
 
 
 ENV_FILE = find_dotenv()
 if ENV_FILE:
     load_dotenv(ENV_FILE)
 MONGO_CONNECTION = env.get("MONGO_CONNECTION")
-
 app = Flask(__name__)
+
 app.config["MONGO_URI"] = MONGO_CONNECTION
 logging_conf_path = os.path.normpath(os.path.join(os.path.dirname(__file__), 'logging.conf'))
 logging.config.fileConfig(logging_conf_path)
