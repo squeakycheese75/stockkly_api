@@ -3,7 +3,7 @@ from flask_cors import cross_origin
 from flask import request
 from flask_restplus import Resource
 from api.wallet.business.holdings import get_holdings, get_holding, get_holdings_historical
-from api.wallet.serializers import holding
+from api.shared.serializers import holding
 from api.restplus import api
 from api import auth
 from cache import cache

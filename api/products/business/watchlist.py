@@ -2,7 +2,7 @@ from api.products.repositories.products import get_product
 from api.products.repositories.prices import get_price_now, get_price_trend, get_price_latest
 
 
-def get_ticker(ticker):
+def get_ticker(ticker) -> dict:
     try:
         # lookup product
         product = get_product(ticker)

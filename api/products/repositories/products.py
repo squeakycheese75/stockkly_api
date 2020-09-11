@@ -1,6 +1,5 @@
-import json
 from bson import json_util
-from mongo import mongoDB
+from api.mongo import mongoDB
 
 
 def get_product(ticker):
@@ -10,7 +9,6 @@ def get_product(ticker):
 
 def get_sectors():
     queryresult = mongoDB.db.products.distinct('sector')
-    # queryresult = mongoDB.db.products.distinct("sector").sort(1)
     return queryresult
 
 

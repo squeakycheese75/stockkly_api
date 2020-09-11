@@ -1,7 +1,5 @@
 import pandas as pd
-import json
-
-
+from json import loads
 from api.products.repositories.products import get_product
 from api.products.repositories.prices import get_price_now, get_price_trend, get_price_latest
 
@@ -23,9 +21,8 @@ def get_historical(ticker, span):
         # drop the priceDate column
         target_column = 'priceDate'
         resval = df.drop(target_column, axis=1)
-        # resval.head()
         response2 = resval.to_json(date_format='iso')
-        rv = json.loads(response2)
+        rv = loads(response2)
         response = rv['price']
     except:
         response = None

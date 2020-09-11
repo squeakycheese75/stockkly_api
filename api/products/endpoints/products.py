@@ -5,7 +5,6 @@ from flask_restplus import Resource
 import json
 
 from api.products.repositories.products import upsert_product, get_products, create_product, get_product
-# from api.products.business.product import get
 from api.products.serialisers import product
 
 from api.restplus import api
@@ -21,6 +20,9 @@ ns = api.namespace('products', description='Operations related to Product data')
 class ProductCollection(Resource):
     @api.marshal_list_with(product)
     def get(self):
+        """
+        Returns a list of Products
+        """
         rv = cache.get('productList')
         if rv is None:
             response = get_products()
@@ -28,12 +30,12 @@ class ProductCollection(Resource):
             cache.set('productList', rv, timeout=60 * 60)
         return rv, 200
 
-    @api.response(201, 'Category successfully created.')
+    @api.response(201, 'Product successfully created.')
     @api.expect(product)
     # @auth.requires_auth
     def post(self):
         """
-        Creates a new product
+        Creates a new Product
         """
         data = request.json
         create_product(data)
@@ -47,7 +49,7 @@ class ProductItem(Resource):
     @api.marshal_with(product)
     def get(self, id):
         """
-        Returns a Product
+        Returns a single Product
         """
         cache_key = 'product:' + id
         rv = cache.get(cache_key)
@@ -59,6 +61,9 @@ class ProductItem(Resource):
     # @auth.requires_auth
     @api.expect(product)
     def put(self, id):
+        """
+        Updates a Produc
+        """
         data = request.json
         upsert_product(data, id)
         return None, 204

@@ -1,4 +1,4 @@
-from mongo import mongoDB
+from api.mongo import mongoDB
 import datetime
 
 
