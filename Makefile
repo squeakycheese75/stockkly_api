@@ -4,6 +4,8 @@ Usage:
 
 make create-local-env           - Create skeleton .env file.
 make dependancies               - Install base dependancies.
+make flake8                     - Run flake8 linting.
+make test-unit                  - Run unit tests.
 
 endef
 

@@ -34,7 +34,6 @@ def get_prices(self, ticker):
 
 
 def get_price_trend(ticker, limit):
-    # return mongoDB.db.prices.find({'ticker': ticker.upper()})
     queryresult = mongoDB.db.prices.find(
         {'ticker': ticker.upper()},
         {'_id': 0, 'price': 1, 'priceDate': 1},
