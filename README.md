@@ -25,7 +25,7 @@ These can be constructed via the docker:
 
 ## Hosting
 
-Currently hosted at: <http://stockklyapi.azurewebsites.net/api/>
+Currently hosted at: <https://stockklyapi.azurewebsites.net/api/>
 
 ## Getting Started
 1. Set up your local environment using ```make create-local-env```
