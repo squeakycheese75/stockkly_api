@@ -11,7 +11,6 @@ import datetime
 
 def get_transaction_history_for_user_and_product(userId, ticker):
     queryresult = mongoDB.db.transactions.find({"owner": userId, "ticker": ticker.upper()})
-    # json_results = json_util.dumps(queryresult)
     return queryresult
 
 

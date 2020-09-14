@@ -22,7 +22,6 @@ dependancies:
 	pip3 install -r requirements/base.txt 
 
 flake8:
-	flake8 ./api/prices
 	flake8 ./api/products
 	flake8 ./api/profile
 	flake8 ./api/wallet

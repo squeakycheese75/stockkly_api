@@ -1,14 +1,10 @@
 import logging
-from flask_cors import cross_origin
 from flask import request
 from flask_restplus import Resource
 import json
-
 from api.products.repositories.products import upsert_product, get_products, create_product, get_product
 from api.products.serialisers import product
-
 from api.restplus import api
-from api import auth
 from cache import cache
 
 log = logging.getLogger(__name__)
@@ -58,7 +54,6 @@ class ProductItem(Resource):
             cache.set(cache_key, rv, timeout=60 * 60)
         return rv, 200
 
-    # @auth.requires_auth
     @api.expect(product)
     def put(self, id):
         """
@@ -67,11 +62,3 @@ class ProductItem(Resource):
         data = request.json
         upsert_product(data, id)
         return None, 204
-
-    # @api.response(204, 'Category successfully deleted.')
-    # def delete(self, id):
-    #     """
-    #     Deletes blog category.
-    #     """
-    #     # delete_category(id)
-    #     return None, 204

@@ -63,7 +63,7 @@ class ProfileCollection(Resource):
         userEmail = userInfo['email']
 
         data = request.json
-        response = upsert_user(data, userEmail)
+        upsert_user(data, userEmail)
         return data, 200
         # return Response(status=204)
 
