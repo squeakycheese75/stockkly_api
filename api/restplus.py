@@ -6,8 +6,9 @@ import settings
 
 log = logging.getLogger(__name__)
 
-api = Api(version='1.0', title='Stockkly API',
-          description='')
+api = Api(version='1.0.1', 
+          title='Stockkly API',
+          description='A free, near real-time, RestAPI for providing price data for stocks (FTSE, NASDAQ), crypto-currencies, funds and Precious metals (GOLD, SILVER).')
 
 
 @api.errorhandler

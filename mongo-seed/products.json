@@ -1,0 +1,3 @@
+[
+  {"_id":{"$oid":"5d0e94dac3452a4cc769be1c"},"ticker":"GOLD:OZ:GBP","displayTicker":"GOLD:OZ","name":"Gold","description":"Gold 1oz ","company":{"name":"na","url":""},"sector":"Precious metals","quote":{"symbol":"£","currency":"GBP"},"exchange":"Gold"}
+]

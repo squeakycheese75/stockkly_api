@@ -3,15 +3,13 @@ from flask_cors import cross_origin
 from flask_restplus import Resource
 import json
 import logging
-# import datetime
 from bson.objectid import ObjectId
 from datetime import date
-# from bson import json_util
 
 from api import auth
 from database.db import get_db
 from api.wallet.repositories.transactions import get_transaction_history_for_user_and_product, get_transaction_history_for_user
-from api.wallet.serializers import transaction
+from api.shared.serializers import transaction
 from api.wallet.business.transaction import upsert_transaction, create_transaction, delete_transaction
 from cache import cache
 

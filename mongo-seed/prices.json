@@ -1,0 +1,25 @@
+[
+  {
+    "_id": {
+        "$oid": "5f5f4f0500ecdde5f6126774"
+    },
+    "priceDate": {
+        "$date": {
+            "$numberLong": "1598745600000"
+        }
+    },
+    "ticker": "GOLD:OZ:GBP",
+    "change": {
+        "$numberDouble": "7.100000000000136"
+    },
+    "movement": {
+        "$numberDouble": "0.48008330459596166"
+    },
+    "open": {
+        "$numberDouble": "1471.81"
+    },
+    "price": {
+        "$numberDouble": "1478.91"
+    }
+  }
+]
