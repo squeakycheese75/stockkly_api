@@ -1,6 +1,3 @@
-# from api import auth
-# from mongo import mongoDB
-# from api.auth import 
 from api.mongo import mongoDB
 from bson import json_util
 
