@@ -16,7 +16,8 @@ create-local-env:
 	echo "MONGO_URI=mongodb://localhost:27017" >> .env
 	echo "FLASK_APP=stockklyAPI" >> .flaskenv
 	echo "FLASK_ENV=development" >> .flaskenv
-	echo "FLASK_RUN_PORT=8080" >> .flaskenv
+	echo "FLASK_RUN_PORT=5000" >> .flaskenv
+	echo "FLASK_DEBUG=True" >> .flaskenv
 
 dependancies: 
 	pip3 install -r requirements/base.txt 
@@ -31,5 +32,5 @@ flake8:
 test-requirements:
 	pip3 install -r requirements/test.txt
 
-test-unit: test-requirements
+test-unit:
 	pytest --cov=./api/products --cov-fail-under 70 --cov-report term-missing --cov-report xml tests/unit/ -v

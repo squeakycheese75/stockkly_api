@@ -2,18 +2,10 @@ from api.products.repositories.products import get_product
 from api.products.repositories.prices import get_price_now, get_price_trend, get_price_latest
 
 
-def get_ticker(ticker) -> dict:
+def get_ticker(ticker: str) -> dict:
     try:
-        # lookup product
         product = get_product(ticker)
-
-        # lookup price
-        isStale = False
-        price = get_price_now(ticker)
-        if price is None:
-            price = get_price_latest(ticker)
-            isStale = True
-            # should probably mark as stale
+        price, isStale = lookup_price(ticker)
 
         trend = list(get_price_trend(ticker, 30))
         tList = []
@@ -40,3 +32,12 @@ def get_ticker(ticker) -> dict:
     except:
         response = None
     return response
+
+
+def lookup_price(ticker: str):
+    isStale = False
+    price = get_price_now(ticker)
+    if price is None:
+        price = get_price_latest(ticker)
+        isStale = True
+    return price, isStale
