@@ -2,9 +2,10 @@ import pandas as pd
 from json import loads
 import logging
 from api.products.repositories.products import get_product
-from api.products.repositories.prices import get_price_now, get_price_trend, get_price_latest
+from api.products.repositories.prices import get_price_trend, get_price_latest
 
 log = logging.getLogger(__name__)
+
 
 def get_historical(ticker, span) -> dict:
     try:
@@ -16,7 +17,7 @@ def get_historical(ticker, span) -> dict:
     except (KeyError, TypeError, ValueError, AttributeError) as error_ee:
         log.error("Could not connect extract historical prices: %s" % error_ee)
         return []
-    
+
 
 def get_price(ticker) -> dict:
     response = get_price_latest(ticker)

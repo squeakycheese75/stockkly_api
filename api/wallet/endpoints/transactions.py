@@ -5,7 +5,6 @@ import json
 import logging
 from bson.objectid import ObjectId
 from datetime import date
-
 from api import auth
 from database.db import get_db
 from api.wallet.repositories.transactions import get_transaction_history_for_user_and_product, get_transaction_history_for_user
@@ -28,11 +27,6 @@ class TransactionCollection(Resource):
         """
         Returns list of all transactions for an authenticated user.
         """
-        # Get email from AccessToken
-        # token = auth.get_Token()
-        # userInfo = auth.get_userinfo_with_token()
-        # userEmail = userInfo['email']
-
         cache_key = 'auth:' + request.headers.get("Authorization", None)
         rv = cache.get(cache_key)
         if rv is None:
@@ -45,17 +39,7 @@ class TransactionCollection(Resource):
         for document in json.loads(cursor):
             doc = str(document["_id"]['$oid'])
             document['id'] = doc
-            # document['transdate'] = document['transdate'].isoformat()
-            # document['transdate']
             res.append(document)
-
-        # response_santized = json.loads(json_util.dumps(response))
-        #  I know but if i don't  do this it runs through dumps twice
-        # resval = json.loads(json.dumps(document))
-        # print("documet", res)
-        # resval = json.loads(cursor)
-        # print("resval", resval)
-
         return res, 200
 
     @api.response(201, 'Transaction successfully created.')
@@ -63,10 +47,8 @@ class TransactionCollection(Resource):
     def post(self):
         userInfo = auth.get_userinfo_with_token()
         userEmail = userInfo['email']
-
         data = request.json
-        response = create_transaction(data, userEmail)
-
+        create_transaction(data, userEmail)
         return None, 201
 
 
@@ -79,10 +61,6 @@ class TransactionItem(Resource):
         """
         Returns list of products transactions for an authenticated user.
         """
-        # Get email from AccessToken
-        # token = auth.get_Token()
-        # userInfo = auth.get_userinfo_with_token()
-        # userEmail = userInfo['email']
         cache_key = 'auth:' + request.headers.get("Authorization", None)
         rv = cache.get(cache_key)
         if rv is None:
@@ -91,15 +69,11 @@ class TransactionItem(Resource):
             cache.set(cache_key, rv, timeout=60 * 50)
 
         response = get_transaction_history_for_user_and_product(rv, id)
-        #  I know but if i don't  do this it runs through dumps twice
-        # resval = json.loads(response)
         return response, 200
 
     @auth.requires_auth
     @api.expect(transaction)
     def put(self, id):
-        # userInfo = auth.get_userinfo_with_token()
-        # userEmail = userInfo['email']
         cache_key = 'auth:' + request.headers.get("Authorization", None)
         rv = cache.get(cache_key)
         if rv is None:
@@ -108,8 +82,7 @@ class TransactionItem(Resource):
             cache.set(cache_key, rv, timeout=60 * 50)
 
         data = request.json
-        record_updated = upsert_transaction(data, rv)
-        # return None, 204
+        upsert_transaction(data, rv)
         return data, 200
 
     @auth.requires_auth
@@ -125,5 +98,4 @@ class TransactionItem(Resource):
 
         data = request.json
         delete_transaction(rv, id)
-        # need to update th holdings
         return None, 204

@@ -3,8 +3,6 @@ import datetime
 
 
 def get_price_latest(ticker):
-    # queryresult = mongoDB.db.prices.find({"ticker": ticker.upper()}).sort({"priceDate": -1}).limit(1)
-    # queryresult = mongoDB.db.prices.find_one({"ticker":  ticker.upper()}).sort('priceDate', -1)
     queryresult = mongoDB.db.prices.find_one(
         {'ticker': ticker.upper()},
         sort=[('priceDate', -1)]
@@ -41,32 +39,3 @@ def get_price_trend(ticker, limit):
         limit=limit
     )
     return queryresult
-
-
-# def create_price(data):
-#     queryresult = mongoDB.db.prices.find_one({"ticker": data['ticker'].upper()})
-
-#     if not queryresult:
-#         price = {
-#             "ticker": data['ticker'].upper(),
-#             "open":  data['open'],
-#             "price": data['price'],
-#             "change": data['change'],
-#             "movement": data['movement']
-#         }
-#         mongoDB.db.prices.insert_one(price)
-#     return
-
-
-# def upsert_price(data, id):
-#     # db = get_db()['stockkly']
-#     # price_collection = db['prices']
-
-#     price = {
-#         "ticker": data['ticker'].upper(),
-#         "open":  data['open'],
-#         "price": data['price'],
-#         "change": data['change'],
-#         "movement": data['movement']
-#     }
-#     return mongoDB.db.prices.update_one({'ticker': id.upper()}, {"$set": price}, upsert=True)

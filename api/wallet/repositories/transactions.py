@@ -1,20 +1,16 @@
 
 from api import auth
-# from database.db import get_db
 import json
 from bson import json_util
 from bson.objectid import ObjectId
-from mongo import mongoDB
-# from bson.objectid import ObjectId
+from api.mongo import mongoDB
 
-# from bson.json_util import dumps
 
 import datetime
 
 
 def get_transaction_history_for_user_and_product(userId, ticker):
     queryresult = mongoDB.db.transactions.find({"owner": userId, "ticker": ticker.upper()})
-    # json_results = json_util.dumps(queryresult)
     return queryresult
 
 
