@@ -103,3 +103,6 @@ venv.bak/
 # mypy
 .mypy_cache/
 .flaskenv
+
+.vscode/settings.json 
+.vscode/launch.json 
