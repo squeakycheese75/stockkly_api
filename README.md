@@ -8,20 +8,12 @@ StockklyAPI is a free, near real-time, RestAPI for providing prices for stocks (
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=squeakycheese75_stockklyApi&metric=sqale_index)](https://sonarcloud.io/dashboard?id=squeakycheese75_stockklyApi)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=squeakycheese75_stockklyApi&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=squeakycheese75_stockklyApi)
 
-
-## Exchanges
-
-* FTSE
-
-## Sectors
-
-* Fiat
-* Crypto
-* Precious Metals
-* Funds
-* Stock
-
 ## Usage
+
+| **Verb** | **Endpoint**                             | **Description**                                 | **Authorised**|
+| -------- | ---------------------------------------- | ------------------------------------------------|---------------|
+| GET      | /api/prices/:ticker                      | Find a single Price using the ticker            | No            |
+| GET      | /api/pricesHistorical/:ticker            | Returns last 90 days worth of prices for ticker | No            |
 
 
 ## Dependancies
