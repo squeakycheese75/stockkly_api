@@ -1,6 +1,6 @@
 import logging
-from api.products.repositories.products import get_product
-from api.products.repositories.prices import get_price_now, get_price_trend, get_price_latest
+from api.repositories.products_repo import get_product
+from api.repositories.prices_repo import get_price_now, get_price_trend, get_price_latest
 
 log = logging.getLogger(__name__)
 
@@ -28,8 +28,8 @@ def get_ticker(ticker: str) -> dict:
             "isStalePrice": isStale
         }
     except (KeyError) as error_key:
-         log.error("KeyError found when building watchlist: %s" % error_key)
-         return {}
+        log.error("KeyError found when building watchlist: %s" % error_key)
+        return {}
     return response
 
 

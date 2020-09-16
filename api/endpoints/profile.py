@@ -1,11 +1,8 @@
 import logging
-from flask_cors import cross_origin
-from flask import request, Response
+from flask import request
 from flask_restplus import Resource
-import json
-
-from api.profile.repository.users import get_user, create_user, upsert_user
-from api.profile.serialisers import user
+from api.repositories.users_repo import get_user, create_user, upsert_user
+from api.shared.serialisers import user
 from api.restplus import api
 from api import auth
 
@@ -23,10 +20,7 @@ class ProfileCollection(Resource):
     def get(self):
         userInfo = auth.get_userinfo_with_token()
         userEmail = userInfo['email']
-
-        # cursor = get_transaction_history_for_user(rv)
         response = get_user(userEmail)
-        # print(response)
         if response is None:
             # Create new profile with defaults
             response = {

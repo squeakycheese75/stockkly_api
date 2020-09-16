@@ -1,14 +1,14 @@
 import logging
 from flask_restplus import Resource
 from api.restplus import api
-from api.products.serialisers import price
+from api.shared.serialisers import price
 import html
 from cache import cache
-from api.products.business.prices import get_price
+from api.controllers.prices import get_price
 
 log = logging.getLogger(__name__)
 
-ns = api.namespace('prices', description='Operations related to Prices sectors')
+ns = api.namespace('prices', description='Operations related to Prices')
 
 
 @ns.route('/<string:ticker>')

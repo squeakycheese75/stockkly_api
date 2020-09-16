@@ -6,7 +6,6 @@ from os import environ as env
 from jose import jwt
 from auth0.v3.authentication import Users
 
-# import logging
 import json
 
 ENV_FILE = find_dotenv()

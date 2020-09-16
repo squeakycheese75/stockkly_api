@@ -1,11 +1,6 @@
 import pandas as pd
 import json
-from api import auth
-from api.wallet.repositories import balances
-from api.products.repositories import prices, products
-from api.profile.repository.users import get_user
-from api.wallet.repositories.transactions import get_transaction_history_for_user_and_product
-from bson import json_util
+from api.repositories import balances_repo, products_repo, prices_repo, users_repo, transactions_repo
 
 
 def calc_movement(increase, price):
@@ -41,7 +36,7 @@ def calc_change(price, open):
 
 
 def calculate_balance(userId, ticker):
-    transactions = get_transaction_history_for_user_and_product(userId, ticker)
+    transactions = transactions_repo.get_transaction_history_for_user_and_product(userId, ticker)
     balance = {
         'ticker': ticker,
         'userId': userId,
@@ -57,9 +52,8 @@ def calculate_balance(userId, ticker):
 
 def enrichWithPriceData(item, userCcy):
     ticker = item['ticker']
-    # print(ticker)
     # enrich with product data
-    product = products.get_product(ticker)
+    product = products_repo.get_product(ticker)
     if product:
         item['name'] = product['name']
         item['ccy'] = product['quote']['currency']
@@ -75,21 +69,21 @@ def enrichWithPriceData(item, userCcy):
         item['spot'] = 1
     else:
         spotTicker = userCcy + ":" + item['ccy']
-        spot = prices.get_price_latest(spotTicker)
+        spot = prices_repo.get_price_latest(spotTicker)
         if spot is None:
             item['spot'] = 1
         else:
             item['spot'] = float(spot['price'])
 
-    priceEntity = prices.get_price_now(ticker)
+    priceEntity = prices_repo.get_price_now(ticker)
     if not priceEntity:
-        priceEntity = prices.get_price_latest(ticker)
+        priceEntity = prices_repo.get_price_latest(ticker)
 
     price = float(priceEntity['price'])
     open = float(priceEntity['open'])
 
     if product['sector'] == 'Fund':
-        previousPrice = prices.get_price_previous(ticker, priceEntity['priceDate'])
+        previousPrice = prices_repo.get_price_previous(ticker, priceEntity['priceDate'])
         open = previousPrice['price']
 
     if price:
@@ -110,24 +104,19 @@ def enrichWithPriceData(item, userCcy):
 
 
 def get_holding(userId, ticker):
-    resval = balances.get_balance(userId, ticker)
-    # f queryresult.count() == 0:
-    #     return "No Results"
+    resval = balances_repo.get_balance(userId, ticker)
     if resval is None:
         return
 
-    userProfile = get_user(userId)
+    userProfile = users_repo.get_user(userId)
 
     resval = enrichWithPriceData(resval, userProfile['currency'])
     return resval
 
 
 def get_holdings(userId):
-
-    userProfile = get_user(userId)
-
-    queryresult = balances.get_balances(userId)
-
+    userProfile = users_repo.get_user(userId)
+    queryresult = balances_repo.get_balances(userId)
     if queryresult.count() == 0:
         return "No Results"
     resval = []
@@ -140,14 +129,6 @@ def get_holdings(userId):
 
 
 def get_holdings_historical(userId):
-    # userProfile = get_user(userId)
-
-    # currentBalances = balances.get_balances(userId)
-
-    # resval = ""
-    # for item in currentBalances:
-    #     quantity = item['qty']
-        # if quantity != 0:
     df = pd.DataFrame(columns=["balance", "balanceDate"], data=[
         [10000.00, '2019-11-01'],
         [9000.00, '2019-10-01'],
@@ -172,33 +153,14 @@ def get_holdings_historical(userId):
 def update_balance(userId, ticker, qty):
     holding = get_holding(userId, ticker)
     response = ''
-    if holding == None:
+    if holding is None:
         data = {
             'ticker': ticker,
             'userId': userId,
             'qty': float(qty)
         }
-        response = balances.create_balance(userId, data)
+        response = balances_repo.create_balance(userId, data)
     else:
-        # old_qty = float(holding['qty'])
-        # new_qty = old_qty + float(qty)
-        # response = balances.update_balance(userId, ticker, new_qty)
         new_balance = calculate_balance(userId, ticker)
-        response = balances.update_balance(userId, ticker, new_balance['qty'])
+        response = balances_repo.update_balance(userId, ticker, new_balance['qty'])
     return response
-
-
-# def get_historical_holdings():
-    # userProfile = get_user(userId)
-
-    # queryresult = balances.get_balances(userId)
-
-    # if queryresult.count() == 0:
-    #     return "No Results"
-    # resval = []
-
-    # for item in queryresult:
-    #     quantity = item['qty']
-    #     if quantity != 0:
-    #         resval.append(enrichWithPriceData(item, userProfile['currency']))
-    # return resval

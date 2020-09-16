@@ -1,8 +1,8 @@
 import pandas as pd
 from json import loads
 import logging
-from api.products.repositories.products import get_product
-from api.products.repositories.prices import get_price_trend, get_price_latest
+from api.repositories.products_repo import get_product
+from api.repositories.prices_repo import get_price_trend, get_price_latest
 
 log = logging.getLogger(__name__)
 

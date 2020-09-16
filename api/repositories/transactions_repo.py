@@ -1,12 +1,6 @@
-
-from api import auth
-import json
 from bson import json_util
 from bson.objectid import ObjectId
 from api.mongo import mongoDB
-
-
-import datetime
 
 
 def get_transaction_history_for_user_and_product(userId, ticker):
