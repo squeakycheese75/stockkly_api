@@ -11,6 +11,9 @@ log = logging.getLogger(__name__)
 ns = api.namespace('pricesHistorical', description='Operations related to Historical Prices')
 
 
+CACHE_PREFIX = 'historicalPrices:'
+
+
 @ns.route('/<string:ticker>')
 @api.response(404, 'PricesHistorical not found.')
 class HistoricalPrices(Resource):
@@ -20,7 +23,7 @@ class HistoricalPrices(Resource):
         Returns a list of historical prices for charting
         """
         unecTicker = html.unescape(ticker)
-        cache_key = 'historicalPrices:' + unecTicker
+        cache_key = CACHE_PREFIX + unecTicker
         rv = cache.get(cache_key)
         if rv is None:
             response = get_historical(unecTicker, 90)

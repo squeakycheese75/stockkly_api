@@ -12,6 +12,8 @@ log = logging.getLogger(__name__)
 
 ns = api.namespace('wallet', description='Operations related to wallet Holdings')
 
+CACHE_PREFIX = 'auth:'
+
 
 @ns.route('/')
 class HoldingsCollection(Resource):
@@ -21,7 +23,7 @@ class HoldingsCollection(Resource):
         """
         Returns list of Holdings
         """
-        cache_key = 'auth:' + request.headers.get("Authorization", None)
+        cache_key = CACHE_PREFIX + request.headers.get("Authorization", None)
         rv = cache.get(cache_key)
         if rv is None:
             userInfo = auth.get_userinfo_with_token()
@@ -40,7 +42,7 @@ class HoldingItem(Resource):
         """
         Returns list of Holdings
         # """
-        cache_key = 'auth:' + request.headers.get("Authorization", None)
+        cache_key = CACHE_PREFIX + request.headers.get("Authorization", None)
         rv = cache.get(cache_key)
         if rv is None:
             userInfo = auth.get_userinfo_with_token()
@@ -51,12 +53,11 @@ class HoldingItem(Resource):
         return response, 200
 
 
-# @api.marshal_list_with(holding)
 @auth.requires_auth
 @ns.route('/historical/')
 class HistoricalHoldings(Resource):
     def get(self):
-        cache_key = 'auth:' + request.headers.get("Authorization", None)
+        cache_key = CACHE_PREFIX + request.headers.get("Authorization", None)
         rv = cache.get(cache_key)
         if rv is None:
             userInfo = auth.get_userinfo_with_token()

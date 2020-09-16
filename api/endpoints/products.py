@@ -12,6 +12,9 @@ log = logging.getLogger(__name__)
 ns = api.namespace('products', description='Operations related to Product data')
 
 
+CACHE_PREFIX = 'product:'
+
+
 @ns.route('/')
 class ProductCollection(Resource):
     @api.marshal_list_with(product)
@@ -47,7 +50,7 @@ class ProductItem(Resource):
         """
         Returns a single Product
         """
-        cache_key = 'product:' + id
+        cache_key = CACHE_PREFIX + id
         rv = cache.get(cache_key)
         if rv is None:
             rv = get_product(id)
