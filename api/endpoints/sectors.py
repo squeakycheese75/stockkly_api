@@ -1,6 +1,6 @@
 import logging
 from flask_restplus import Resource
-from api.products.repositories.products import get_sectors
+from api.repositories.products_repo import get_sectors
 from api.restplus import api
 from cache import cache
 
@@ -12,6 +12,9 @@ ns = api.namespace('products/sectors', description='Operations related to Produc
 @ns.route('/')
 class SectorCollection(Resource):
     def get(self):
+        """
+        Returns a list of available price sectors.
+        """
         rv = cache.get('sectorsList')
         if rv is None:
             rv = get_sectors()

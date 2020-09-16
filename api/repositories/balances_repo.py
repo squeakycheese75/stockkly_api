@@ -1,5 +1,4 @@
 from api.mongo import mongoDB
-from bson import json_util
 
 
 def get_balance(userId, ticker):

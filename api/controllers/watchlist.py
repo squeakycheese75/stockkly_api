@@ -1,5 +1,5 @@
 import logging
-from api.products.repositories.products import get_product
+from api.repositories.products_repo import get_product
 from api.repositories.prices_repo import get_price_now, get_price_trend, get_price_latest
 
 log = logging.getLogger(__name__)

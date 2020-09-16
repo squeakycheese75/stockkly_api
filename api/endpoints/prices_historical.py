@@ -3,19 +3,18 @@ from flask_restplus import Resource
 from api.restplus import api
 import html
 from cache import cache
-from api.business.prices import get_historical
+from api.controllers.prices import get_historical
 
 
 log = logging.getLogger(__name__)
 
-ns = api.namespace('pricesHistorical', description='Operations related to Prices sectors')
+ns = api.namespace('pricesHistorical', description='Operations related to Historical Prices')
 
 
 @ns.route('/<string:ticker>')
 @api.response(404, 'PricesHistorical not found.')
 class HistoricalPrices(Resource):
-
-    # @api.marshal_with(product)
+    # @api.marshal_with(prices)
     def get(self, ticker):
         """
         Returns a list of historical prices for charting

@@ -1,17 +1,12 @@
-from flask import Blueprint, render_template, request, jsonify
-from flask_cors import cross_origin
-from flask_restplus import Resource
-import json
 import logging
-from bson.objectid import ObjectId
-from datetime import date
+import json
+from flask_restplus import Resource
+from flask import request
 from api import auth
-from database.db import get_db
-from api.wallet.repositories.transactions import get_transaction_history_for_user_and_product, get_transaction_history_for_user
-from api.shared.serializers import transaction
-from api.wallet.business.transaction import upsert_transaction, create_transaction, delete_transaction
+from api.repositories.transactions_repo import get_transaction_history_for_user_and_product, get_transaction_history_for_user
+from api.shared.serialisers import transaction
+from api.controllers.transaction import upsert_transaction, create_transaction, delete_transaction
 from cache import cache
-
 from api.restplus import api
 
 log = logging.getLogger(__name__)
@@ -96,6 +91,6 @@ class TransactionItem(Resource):
             rv = userInfo['email']
             cache.set(cache_key, rv, timeout=60 * 50)
 
-        data = request.json
+        request.json
         delete_transaction(rv, id)
         return None, 204

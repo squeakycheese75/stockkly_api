@@ -14,11 +14,11 @@ from api.mongo import mongoDB
 from werkzeug.contrib.fixers import ProxyFix
 
 from api.endpoints.prices import ns as product_prices_namespace
-from api.endpoints.pricesHistorical import ns as pricesHistorical_namespace
-from api.products.endpoints.products import ns as products_namespace
-from api.profile.endpoints.user import ns as profile_users_namespace
-from api.wallet.endpoints.transactions import ns as wallet_transactions_namespace
-from api.wallet.endpoints.holdings import ns as wallet_holdings_namespace
+from api.endpoints.prices_historical import ns as pricesHistorical_namespace
+from api.endpoints.products import ns as products_namespace
+from api.endpoints.profile import ns as profile_users_namespace
+from api.endpoints.transactions import ns as wallet_transactions_namespace
+from api.endpoints.holdings import ns as wallet_holdings_namespace
 from api.endpoints.watchlist import ns as product_watchlist_namespace
 
 

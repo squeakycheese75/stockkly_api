@@ -22,7 +22,7 @@ The below are dependancies for the StockklyAPI.
 
 * [MongoDb installed](https://hub.docker.com/_/mongo)
 
-These can be constructed via the docker:
+These can be constructed via the docker-compose:
 
 1. Ensure you have docker installed. 
 2. ```cd dependancies```

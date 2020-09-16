@@ -22,7 +22,7 @@ dependancies:
 	pip3 install -r requirements/base.txt 
 
 flake8:
-	flake8 ./api/business
+	flake8 ./api/controllers
 	flake8 ./api/endpoints
 	flake8 ./api/repositories
 	# flake8 ./tests
@@ -31,7 +31,7 @@ test-requirements:
 	pip3 install -r requirements/test.txt
 
 test-unit:
-	pytest --cov=./api/business --cov-fail-under 70 --cov-report term-missing --cov-report xml tests/unit/ -v
+	pytest --cov=./api/controllers --cov-fail-under 70 --cov-report term-missing --cov-report xml tests/unit/ -v
 
 commit: flake8 test-unit
 	cz commit
