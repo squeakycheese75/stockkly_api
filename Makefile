@@ -32,3 +32,6 @@ test-requirements:
 
 test-unit:
 	pytest --cov=./api/business --cov-fail-under 70 --cov-report term-missing --cov-report xml tests/unit/ -v
+
+commit: flake8 test-unit
+	cz commit

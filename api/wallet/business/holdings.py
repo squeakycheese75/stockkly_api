@@ -2,7 +2,8 @@ import pandas as pd
 import json
 from api import auth
 from api.wallet.repositories import balances
-from api.products.repositories import prices, products
+from api.products.repositories import products
+from api.repositories import prices_repo
 from api.profile.repository.users import get_user
 from api.wallet.repositories.transactions import get_transaction_history_for_user_and_product
 from bson import json_util
@@ -75,21 +76,21 @@ def enrichWithPriceData(item, userCcy):
         item['spot'] = 1
     else:
         spotTicker = userCcy + ":" + item['ccy']
-        spot = prices.get_price_latest(spotTicker)
+        spot = prices_repo.get_price_latest(spotTicker)
         if spot is None:
             item['spot'] = 1
         else:
             item['spot'] = float(spot['price'])
 
-    priceEntity = prices.get_price_now(ticker)
+    priceEntity = prices_repo.get_price_now(ticker)
     if not priceEntity:
-        priceEntity = prices.get_price_latest(ticker)
+        priceEntity = prices_repo.get_price_latest(ticker)
 
     price = float(priceEntity['price'])
     open = float(priceEntity['open'])
 
     if product['sector'] == 'Fund':
-        previousPrice = prices.get_price_previous(ticker, priceEntity['priceDate'])
+        previousPrice = prices_repo.get_price_previous(ticker, priceEntity['priceDate'])
         open = previousPrice['price']
 
     if price:
@@ -140,14 +141,6 @@ def get_holdings(userId):
 
 
 def get_holdings_historical(userId):
-    # userProfile = get_user(userId)
-
-    # currentBalances = balances.get_balances(userId)
-
-    # resval = ""
-    # for item in currentBalances:
-    #     quantity = item['qty']
-        # if quantity != 0:
     df = pd.DataFrame(columns=["balance", "balanceDate"], data=[
         [10000.00, '2019-11-01'],
         [9000.00, '2019-10-01'],
