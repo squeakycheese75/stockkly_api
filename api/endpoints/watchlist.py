@@ -1,7 +1,7 @@
 import logging
 from flask_restplus import Resource
 from api.restplus import api
-from api.products.business import watchlist
+from api.business import watchlist
 
 log = logging.getLogger(__name__)
 

@@ -22,13 +22,13 @@ dependancies:
 	pip3 install -r requirements/base.txt 
 
 flake8:
-	flake8 ./api/products
-	flake8 ./api/profile
-	flake8 ./api/wallet
-	flake8 ./api/watchlist
+	flake8 ./api/business
+	flake8 ./api/endpoints
+	flake8 ./api/repositories
+	# flake8 ./tests
 
 test-requirements:
 	pip3 install -r requirements/test.txt
 
 test-unit:
-	pytest --cov=./api/products --cov-fail-under 70 --cov-report term-missing --cov-report xml tests/unit/ -v
+	pytest --cov=./api/business --cov-fail-under 70 --cov-report term-missing --cov-report xml tests/unit/ -v

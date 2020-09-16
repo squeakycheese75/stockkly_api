@@ -3,7 +3,7 @@ from flask_restplus import Resource
 from api.restplus import api
 import html
 from cache import cache
-from api.products.business.prices import get_historical
+from api.business.prices import get_historical
 
 
 log = logging.getLogger(__name__)

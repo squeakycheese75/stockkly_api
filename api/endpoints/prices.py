@@ -4,7 +4,7 @@ from api.restplus import api
 from api.products.serialisers import price
 import html
 from cache import cache
-from api.products.business.prices import get_price
+from api.business.prices import get_price
 
 log = logging.getLogger(__name__)
 
