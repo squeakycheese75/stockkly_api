@@ -34,7 +34,7 @@ def create_transaction(data, user_id):
 
 
 def upsert_transaction(data, user_id):
-    mongoId = ObjectId(data['id'])
+    mongo_id = ObjectId(data['id'])
 
     trans = {
         "owner": user_id,
@@ -45,7 +45,7 @@ def upsert_transaction(data, user_id):
         'price': float(data['price']),
         'details': data['details'],
     }
-    return mongoDB.db.transactions.update_one({'_id': mongoId}, {"$set": trans}, upsert=True)
+    return mongoDB.db.transactions.update_one({'_id': mongo_id}, {"$set": trans}, upsert=True)
 
 
 def delete_transaction(id):
