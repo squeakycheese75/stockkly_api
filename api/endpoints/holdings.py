@@ -26,8 +26,8 @@ class HoldingsCollection(Resource):
         cache_key = CACHE_PREFIX + request.headers.get("Authorization", None)
         rv = cache.get(cache_key)
         if rv is None:
-            userInfo = auth.get_userinfo_with_token()
-            rv = userInfo['email']
+            user_info = auth.get_userinfo_with_token()
+            rv = user_info['email']
             cache.set(cache_key, rv, timeout=60 * 50)
         response = get_holdings(rv)
         return response, 200
@@ -45,8 +45,8 @@ class HoldingItem(Resource):
         cache_key = CACHE_PREFIX + request.headers.get("Authorization", None)
         rv = cache.get(cache_key)
         if rv is None:
-            userInfo = auth.get_userinfo_with_token()
-            rv = userInfo['email']
+            user_info = auth.get_userinfo_with_token()
+            rv = user_info['email']
             cache.set(cache_key, rv, timeout=60 * 50)
 
         response = get_holding(rv, ticker)
@@ -60,8 +60,8 @@ class HistoricalHoldings(Resource):
         cache_key = CACHE_PREFIX + request.headers.get("Authorization", None)
         rv = cache.get(cache_key)
         if rv is None:
-            userInfo = auth.get_userinfo_with_token()
-            rv = userInfo['email']
+            user_info = auth.get_userinfo_with_token()
+            rv = user_info['email']
             cache.set(cache_key, rv, timeout=60 * 50)
         response = get_holdings_historical("test")
         return response, 200

@@ -13,6 +13,8 @@ log = logging.getLogger(__name__)
 
 ns = api.namespace('transactions', description='Operations related to wallet Transactions')
 
+CACHE_PREFIX = 'auth:'
+
 
 @ns.route('/')
 class TransactionCollection(Resource):
@@ -22,11 +24,11 @@ class TransactionCollection(Resource):
         """
         Returns list of all transactions for an authenticated user.
         """
-        cache_key = 'auth:' + request.headers.get("Authorization", None)
+        cache_key = CACHE_PREFIX + request.headers.get("Authorization", None)
         rv = cache.get(cache_key)
         if rv is None:
-            userInfo = auth.get_userinfo_with_token()
-            rv = userInfo['email']
+            user_info = auth.get_userinfo_with_token()
+            rv = user_info['email']
             cache.set(cache_key, rv, timeout=60 * 50)
 
         cursor = get_transaction_history_for_user(rv)
@@ -40,8 +42,8 @@ class TransactionCollection(Resource):
     @api.response(201, 'Transaction successfully created.')
     @api.expect(transaction)
     def post(self):
-        userInfo = auth.get_userinfo_with_token()
-        userEmail = userInfo['email']
+        user_info = auth.get_userinfo_with_token()
+        userEmail = user_info['email']
         data = request.json
         create_transaction(data, userEmail)
         return None, 201
@@ -56,11 +58,11 @@ class TransactionItem(Resource):
         """
         Returns list of products transactions for an authenticated user.
         """
-        cache_key = 'auth:' + request.headers.get("Authorization", None)
+        cache_key = CACHE_PREFIX + request.headers.get("Authorization", None)
         rv = cache.get(cache_key)
         if rv is None:
-            userInfo = auth.get_userinfo_with_token()
-            rv = userInfo['email']
+            user_info = auth.get_userinfo_with_token()
+            rv = user_info['email']
             cache.set(cache_key, rv, timeout=60 * 50)
 
         response = get_transaction_history_for_user_and_product(rv, id)
@@ -69,11 +71,11 @@ class TransactionItem(Resource):
     @auth.requires_auth
     @api.expect(transaction)
     def put(self, id):
-        cache_key = 'auth:' + request.headers.get("Authorization", None)
+        cache_key = CACHE_PREFIX + request.headers.get("Authorization", None)
         rv = cache.get(cache_key)
         if rv is None:
-            userInfo = auth.get_userinfo_with_token()
-            rv = userInfo['email']
+            user_info = auth.get_userinfo_with_token()
+            rv = user_info['email']
             cache.set(cache_key, rv, timeout=60 * 50)
 
         data = request.json
@@ -84,11 +86,11 @@ class TransactionItem(Resource):
     @api.response(204, 'Transaction successfully deleted.')
     def delete(self, id):
 
-        cache_key = 'auth:' + request.headers.get("Authorization", None)
+        cache_key = CACHE_PREFIX + request.headers.get("Authorization", None)
         rv = cache.get(cache_key)
         if rv is None:
-            userInfo = auth.get_userinfo_with_token()
-            rv = userInfo['email']
+            user_info = auth.get_userinfo_with_token()
+            rv = user_info['email']
             cache.set(cache_key, rv, timeout=60 * 50)
 
         request.json

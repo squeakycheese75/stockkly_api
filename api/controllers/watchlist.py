@@ -9,7 +9,7 @@ def get_ticker(ticker: str) -> dict:
     try:
         product = get_product(ticker)
         print(product)
-        price, isStale = lookup_price(ticker)
+        price, is_stale = lookup_price(ticker)
         print(price)
         trend_list = build_price_trend(ticker, 30)
 
@@ -25,7 +25,7 @@ def get_ticker(ticker: str) -> dict:
             "ticker": ticker,
             "displayTicker": product["displayTicker"],
             "trend":  trend_list,
-            "isStalePrice": isStale
+            "isStalePrice": is_stale
         }
     except (KeyError) as error_key:
         log.error("KeyError found when building watchlist: %s" % error_key)
@@ -34,19 +34,19 @@ def get_ticker(ticker: str) -> dict:
 
 
 def lookup_price(ticker: str) -> (dict, bool):
-    isStale = False
+    is_stale = False
     price = get_price_now(ticker)
     if price is None:
         price = get_price_latest(ticker)
-        isStale = True
-    return price, isStale
+        is_stale = True
+    return price, is_stale
 
 
 def build_price_trend(ticker: str, days: int) -> list:
     price_trend = list(get_price_trend(ticker, days))
-    tList = []
+    revered_price_list = []
     for x in price_trend:
         # I polluted the data with strings.  This is to filter them out.
         if type(x['price']) is float:
-            tList.append(x['price'])
-    return list(reversed(tList))
+            revered_price_list.append(x['price'])
+    return list(reversed(revered_price_list))

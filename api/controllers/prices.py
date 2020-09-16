@@ -7,7 +7,7 @@ from api.repositories.prices_repo import get_price_trend, get_price_latest
 log = logging.getLogger(__name__)
 
 
-def get_historical(ticker, span) -> dict:
+def get_historical(ticker, span) -> list:
     try:
         price_list = clean_price_list(ticker, span)
         if not price_list:

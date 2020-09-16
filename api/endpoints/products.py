@@ -11,7 +11,6 @@ log = logging.getLogger(__name__)
 
 ns = api.namespace('products', description='Operations related to Product data')
 
-
 CACHE_PREFIX = 'product:'
 
 

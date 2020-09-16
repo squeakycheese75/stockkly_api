@@ -21,10 +21,10 @@ class PriceItem(Resource):
         """
         Returns the latest price
         """
-        unecTicker = html.unescape(ticker)
-        cache_key = CACHE_PREFIX + unecTicker
+        unec_ticker = html.unescape(ticker)
+        cache_key = CACHE_PREFIX + unec_ticker
         rv = cache.get(cache_key)
         if rv is None:
-            rv = get_price(unecTicker)
+            rv = get_price(unec_ticker)
             cache.set(cache_key, rv, timeout=30)
         return rv, 200

@@ -17,16 +17,15 @@ CACHE_PREFIX = 'historicalPrices:'
 @ns.route('/<string:ticker>')
 @api.response(404, 'PricesHistorical not found.')
 class HistoricalPrices(Resource):
-    # @api.marshal_with(prices)
     def get(self, ticker):
         """
         Returns a list of historical prices for charting
         """
-        unecTicker = html.unescape(ticker)
-        cache_key = CACHE_PREFIX + unecTicker
+        unec_ticker = html.unescape(ticker)
+        cache_key = CACHE_PREFIX + unec_ticker
         rv = cache.get(cache_key)
         if rv is None:
-            response = get_historical(unecTicker, 90)
+            response = get_historical(unec_ticker, 90)
             cache.set(cache_key, rv, timeout=60 * 60)
             rv = response
         return rv, 200

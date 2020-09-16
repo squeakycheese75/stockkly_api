@@ -3,13 +3,13 @@ from bson.objectid import ObjectId
 from api.mongo import mongoDB
 
 
-def get_transaction_history_for_user_and_product(userId, ticker):
-    queryresult = mongoDB.db.transactions.find({"owner": userId, "ticker": ticker.upper()})
+def get_transaction_history_for_user_and_product(user_id, ticker):
+    queryresult = mongoDB.db.transactions.find({"owner": user_id, "ticker": ticker.upper()})
     return queryresult
 
 
-def get_transaction_history_for_user(userId):
-    queryresult = mongoDB.db.transactions.find({"owner": userId})
+def get_transaction_history_for_user(user_id):
+    queryresult = mongoDB.db.transactions.find({"owner": user_id})
 
     json_results = json_util.dumps(queryresult)
     return(json_results)
@@ -20,9 +20,9 @@ def get_transaction_by_id(id):
     return(resval)
 
 
-def create_transaction(data, userId):
+def create_transaction(data, user_id):
     trans = {
-        "owner": userId,
+        "owner": user_id,
         'ticker': data['ticker'].upper(),
         'transdate': data['transdate'],
         'transtype': data['transtype'],
@@ -33,11 +33,11 @@ def create_transaction(data, userId):
     return mongoDB.db.transactions.insert_one(trans)
 
 
-def upsert_transaction(data, userId):
+def upsert_transaction(data, user_id):
     mongoId = ObjectId(data['id'])
 
     trans = {
-        "owner": userId,
+        "owner": user_id,
         'ticker': data['ticker'].upper(),
         'transdate': data['transdate'],
         'transtype': data['transtype'],
