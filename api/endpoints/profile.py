@@ -59,7 +59,6 @@ class ProfileCollection(Resource):
         data = request.json
         upsert_user(data, userEmail)
         return data, 200
-        # return Response(status=204)
 
     # @api.response(204, 'Category successfully deleted.')
     # def delete(self, id):

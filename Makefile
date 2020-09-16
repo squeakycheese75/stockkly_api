@@ -33,5 +33,5 @@ test-requirements:
 test-unit:
 	pytest --cov=./api/controllers --cov-fail-under 70 --cov-report term-missing --cov-report xml tests/unit/ -v
 
-commit: flake8 test-unit
+commit: flake8
 	cz commit
