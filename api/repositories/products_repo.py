@@ -33,7 +33,6 @@ def create_product(data):
             "exchange": data['exchange']
         }
         mongoDB.db.products.insert_one(product)
-    return
 
 
 def upsert_product(data, ticker):

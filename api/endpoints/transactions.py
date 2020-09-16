@@ -43,9 +43,9 @@ class TransactionCollection(Resource):
     @api.expect(transaction)
     def post(self):
         user_info = auth.get_userinfo_with_token()
-        userEmail = user_info['email']
+        user_email = user_info['email']
         data = request.json
-        create_transaction(data, userEmail)
+        create_transaction(data, user_email)
         return None, 201
 
 
