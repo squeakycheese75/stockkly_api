@@ -18,9 +18,9 @@ class ProfileCollection(Resource):
     @api.marshal_list_with(user)
     @auth.requires_auth
     def get(self):
-        userInfo = auth.get_userinfo_with_token()
-        userEmail = userInfo['email']
-        response = get_user(userEmail)
+        user_info = auth.get_userinfo_with_token()
+        user_email = user_info['email']
+        response = get_user(user_email)
         if response is None:
             # Create new profile with defaults
             response = {
@@ -30,7 +30,7 @@ class ProfileCollection(Resource):
                 "refreshRate": 30,
                 "devmode": False
             }
-            create_user(response, userEmail)
+            create_user(response, user_email)
         else:
             response['id'] = str(response["_id"])
 
@@ -43,27 +43,19 @@ class ProfileCollection(Resource):
         """
         Creates a new product
         """
-        userInfo = auth.get_userinfo_with_token()
-        userEmail = userInfo['email']
+        user_info = auth.get_userinfo_with_token()
+        user_email = user_info['email']
 
         data = request.json
-        create_user(data, userEmail)
+        create_user(data, user_email)
         return None, 201
 
     @auth.requires_auth
     @api.expect(user)
     def put(self):
-        userInfo = auth.get_userinfo_with_token()
-        userEmail = userInfo['email']
+        user_info = auth.get_userinfo_with_token()
+        user_email = user_info['email']
 
         data = request.json
-        upsert_user(data, userEmail)
+        upsert_user(data, user_email)
         return data, 200
-
-    # @api.response(204, 'Category successfully deleted.')
-    # def delete(self, id):
-    #     """
-    #     Deletes blog category.
-    #     """
-    #     # delete_category(id)
-    #     return None, 204

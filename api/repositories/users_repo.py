@@ -1,17 +1,17 @@
 from api.mongo import mongoDB
 
 
-def get_user(userId):
-    queryresult = mongoDB.db.users.find_one({"userId": userId})
+def get_user(user_id):
+    queryresult = mongoDB.db.users.find_one({"userId": user_id})
     return queryresult
 
 
-def create_user(data, userId):
-    queryresult = mongoDB.db.users.find_one({"userId": userId})
+def create_user(data, user_id):
+    queryresult = mongoDB.db.users.find_one({"userId": user_id})
 
     if not queryresult:
         user = {
-            "userId": userId,
+            "userId": user_id,
             "watchList": data['watchList'],
             "currency": data['currency'],
             "symbol": data['symbol'],
@@ -22,7 +22,7 @@ def create_user(data, userId):
     return
 
 
-def upsert_user(data, userId):
+def upsert_user(data, user_id):
     user = {
         "watchList": data['watchList'],
         "currency": data['currency'],
@@ -30,4 +30,4 @@ def upsert_user(data, userId):
         "refreshRate": data['refreshRate'],
         "devmode": data['devmode']
     }
-    return mongoDB.db.users.update_one({'userId': userId}, {"$set": user}, upsert=True)
+    return mongoDB.db.users.update_one({'userId': user_id}, {"$set": user}, upsert=True)

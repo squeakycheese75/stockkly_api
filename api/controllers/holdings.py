@@ -68,8 +68,8 @@ def enrich_with_price_data(item, user_ccy):
     if item['ccy'] == user_ccy:
         item['spot'] = 1
     else:
-        spotTicker = user_ccy + ":" + item['ccy']
-        spot = prices_repo.get_price_latest(spotTicker)
+        spot_ticker = user_ccy + ":" + item['ccy']
+        spot = prices_repo.get_price_latest(spot_ticker)
         if spot is None:
             item['spot'] = 1
         else:
@@ -80,14 +80,14 @@ def enrich_with_price_data(item, user_ccy):
         price_entity = prices_repo.get_price_latest(ticker)
 
     price = float(price_entity['price'])
-    open = float(price_entity['open'])
+    price_open = float(price_entity['open'])
 
     if product['sector'] == 'Fund':
-        previousPrice = prices_repo.get_price_previous(ticker, price_entity['priceDate'])
-        open = previousPrice['price']
+        previous_price = prices_repo.get_price_previous(ticker, price_entity['priceDate'])
+        price_open = previous_price['price']
 
     if price:
-        change = calc_change(price, open)
+        change = calc_change(price, price_open)
         item['change'] = change
         item['price'] = price
         item['movement'] = calc_movement(change, price)
@@ -108,9 +108,9 @@ def get_holding(user_id, ticker):
     if resval is None:
         return
 
-    userProfile = users_repo.get_user(user_id)
+    user_profile = users_repo.get_user(user_id)
 
-    resval = enrich_with_price_data(resval, userProfile['currency'])
+    resval = enrich_with_price_data(resval, user_profile['currency'])
     return resval
 
 
