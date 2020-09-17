@@ -19,7 +19,6 @@ def create_user(data, user_id):
             "devmode": False
         }
         mongoDB.db.users.insert_one(user)
-    return
 
 
 def upsert_user(data, user_id):

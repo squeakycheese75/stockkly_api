@@ -1,38 +1,7 @@
 import pandas as pd
 import json
 from api.repositories import balances_repo, products_repo, prices_repo, users_repo, transactions_repo
-
-
-def calc_movement(increase, price):
-    if increase is None:
-        return 0
-    if price is None:
-        return 0
-    return (increase / price) * 100
-
-
-def calc_total_change(holding, change):
-    if holding is None:
-        return 0
-    if change is None:
-        return 0
-    return (holding * change)
-
-
-def calc_total(holding, price):
-    if holding is None:
-        return 0
-    if price is None:
-        return 0
-    return (holding * price)
-
-
-def calc_change(price, open):
-    if price is None:
-        return 0
-    if open is None:
-        return 0
-    return (price - open)
+from api.shared.helpers.pricing_helper import calc_change, calc_movement, calc_total, calc_total_change
 
 
 def calculate_balance(user_id, ticker):
