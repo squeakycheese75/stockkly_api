@@ -7,7 +7,6 @@ import logging.config
 import settings
 from api.restplus import api
 from api.mongo import mongoDB
-from waitress import serve
 from werkzeug.middleware.proxy_fix import ProxyFix
 from api.endpoints.prices import ns as product_prices_namespace
 from api.endpoints.prices_historical import ns as pricesHistorical_namespace
@@ -29,7 +28,6 @@ app.config["MONGO_URI"] = MONGO_CONNECTION
 logging_conf_path = os.path.normpath(os.path.join(os.path.dirname(__file__), 'logging.conf'))
 logging.config.fileConfig(logging_conf_path)
 log = logging.getLogger(__name__)
-# CORS(app, )
 CORS(app, resources={r"/*": {"origins": "*", "send_wildcard": "False"}})
 
 
@@ -55,15 +53,11 @@ def initialize_app(flask_app):
 
 
 def main():
-    if (settings.FLASK_DEBUG):
-        log.debug('Running in Development Mode')
-        app.run(host=settings.FLASK_HOST,
-                port=settings.FLASK_PORT,
-                debug=settings.FLASK_DEBUG,
-                threaded=True)
-    else:
-        log.info('Running in Production Mode')
-        serve(app,  host=settings.FLASK_HOST, port=settings.FLASK_PORT)
+    log.info('Running in Development Mode')
+    app.run(host=settings.FLASK_HOST,
+            port=settings.FLASK_PORT,
+            debug=settings.FLASK_DEBUG,
+            threaded=True)
 
 
 initialize_app(app)

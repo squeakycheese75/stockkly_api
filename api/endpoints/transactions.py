@@ -4,7 +4,7 @@ from flask_restplus import Resource
 from flask import request
 from api import auth
 from api.repositories.transactions_repo import get_transaction_history_for_user_and_product, get_transaction_history_for_user
-from api.shared.serialisers import transaction
+from api.repositories.models.serialisers import transaction
 from api.controllers.transaction import upsert_transaction, create_transaction, delete_transaction
 from api.cache import cache
 from api.restplus import api

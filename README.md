@@ -22,11 +22,19 @@ The below are dependancies for the StockklyAPI.
 
 * [MongoDb installed](https://hub.docker.com/_/mongo)
 
-These can be constructed via the docker-compose:
+These can be constructed via the docker-compose in the dependancies folder:
 
 1. Ensure you have docker installed. 
 2. ```cd dependancies```
 3. ```docker-compose up -d```
+
+
+## Docker
+
+You can build the API and host via a docker container, either locate the image on DockerHub or run
+
+1. docker build -t stockkly_api .    
+2. docker run -d --name stockkly_api -p 5000:5000 stockkly_api
 
 ## Hosting
 

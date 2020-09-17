@@ -3,7 +3,7 @@ import json
 from flask import request
 from flask_restplus import Resource
 from api.repositories.products_repo import upsert_product, get_products, create_product, get_product
-from api.shared.serialisers import product
+from api.repositories.models.serialisers import product
 from api.restplus import api
 from api.cache import cache
 
