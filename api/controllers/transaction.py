@@ -14,7 +14,6 @@ def upsert_transaction(data, user_id):
     response = transactions_repo.upsert_transaction(data, user_id)
 
     quantity = (float(data['quantity']) - float(tran['quantity']))
-
     update_balance(user_id, data['ticker'], quantity)
     return response
 

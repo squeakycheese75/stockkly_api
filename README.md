@@ -45,6 +45,7 @@ Currently hosted at: <https://stockklyapi.azurewebsites.net/api/>
 2. Update your local environment details
 3. ```run flask```
 
+
 ## Disclaimer
 
 StockkyAPI is an open source project for collating and provide data from various sources, despite best attempts data provided is not be suitable 
