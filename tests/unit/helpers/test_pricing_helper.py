@@ -1,6 +1,6 @@
 
 from pytest import mark
-from api.shared.helpers.pricing_helper import calc_movement, calc_change, calc_total
+from api.shared.helpers.pricing_helper import calc_movement, calc_change, calc_total, calc_total_change
 
 
 @mark.parametrize(
@@ -51,3 +51,17 @@ def test_calc_total(holding, price, expected_result):
     resval = calc_total(holding, price)
     assert resval == expected_result
 
+@mark.parametrize(
+ "holding, change, expected_result",
+ [(0, 0, 0),
+  (0, 1, 0),
+  (None, 0, 0),
+  (0, None, 0),
+  (None, None, 0),
+  (100, 2.10, 210),
+  (10, -2.00, -20),
+  ]
+)
+def test_calc_total_change(holding, change, expected_result):
+    resval = calc_total_change(holding, change)
+    assert resval == expected_result

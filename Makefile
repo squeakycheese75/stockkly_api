@@ -12,7 +12,9 @@ endef
 export HELP
 
 create-local-env:
-	echo "MONGO_CONNECTION=stockkly" >> .env
+	echo "MONGO_CONNECTION=mongodb://localhost:27017/stockkly" >> .env
+	echo "AUTH0_DOMAIN=***your autho0 domain crdentials***" >> .env
+	echo "API_IDENTIFIER=***your front end***" >> .env
 	echo "FLASK_APP=stockklyAPI" >> .flaskenv
 	echo "FLASK_ENV=development" >> .flaskenv
 	echo "FLASK_RUN_PORT=5000" >> .flaskenv
