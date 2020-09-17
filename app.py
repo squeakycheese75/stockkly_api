@@ -1,18 +1,14 @@
 from flask import Flask, Blueprint
-from flask_restplus import Resource, Api
 from flask_cors import CORS
 from dotenv import load_dotenv, find_dotenv
 from os import environ as env
-
 import os
 import logging.config
 import settings
 from api.restplus import api
-
-from cache import cache
 from api.mongo import mongoDB
-from werkzeug.contrib.fixers import ProxyFix
-
+from waitress import serve
+from werkzeug.middleware.proxy_fix import ProxyFix
 from api.endpoints.prices import ns as product_prices_namespace
 from api.endpoints.prices_historical import ns as pricesHistorical_namespace
 from api.endpoints.products import ns as products_namespace
@@ -34,7 +30,8 @@ logging_conf_path = os.path.normpath(os.path.join(os.path.dirname(__file__), 'lo
 logging.config.fileConfig(logging_conf_path)
 log = logging.getLogger(__name__)
 # CORS(app, )
-CORS(app, resources={r"/*": {"origins": "*", "send_wildcard": "False"}}) 
+CORS(app, resources={r"/*": {"origins": "*", "send_wildcard": "False"}})
+
 
 def configure_app(flask_app):
     flask_app.config["MONGO_URI"] = MONGO_CONNECTION
@@ -58,11 +55,15 @@ def initialize_app(flask_app):
 
 
 def main():
-    log.info('Running')
-    app.run(host=settings.FLASK_HOST, 
-            port=settings.FLASK_PORT,
-            debug=settings.FLASK_DEBUG, 
-            threaded=True)
+    if (settings.FLASK_DEBUG):
+        log.debug('Running in Development Mode')
+        app.run(host=settings.FLASK_HOST,
+                port=settings.FLASK_PORT,
+                debug=settings.FLASK_DEBUG,
+                threaded=True)
+    else:
+        log.info('Running in Production Mode')
+        serve(app,  host=settings.FLASK_HOST, port=settings.FLASK_PORT)
 
 
 initialize_app(app)

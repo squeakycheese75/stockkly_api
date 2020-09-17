@@ -2,7 +2,7 @@ import logging
 from flask_restplus import Resource
 from api.repositories.products_repo import get_sectors
 from api.restplus import api
-from cache import cache
+from api.cache import cache
 
 log = logging.getLogger(__name__)
 

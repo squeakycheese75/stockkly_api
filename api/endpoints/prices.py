@@ -3,7 +3,7 @@ from flask_restplus import Resource
 from api.restplus import api
 from api.shared.serialisers import price
 import html
-from cache import cache
+from api.cache import cache
 from api.controllers.prices import get_price
 
 log = logging.getLogger(__name__)

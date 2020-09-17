@@ -5,7 +5,7 @@ from api.controllers.holdings import get_holdings, get_holding, get_holdings_his
 from api.shared.serialisers import holding
 from api.restplus import api
 from api import auth
-from cache import cache
+from api.cache import cache
 
 
 log = logging.getLogger(__name__)
