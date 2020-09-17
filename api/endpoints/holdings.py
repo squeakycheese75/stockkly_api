@@ -34,7 +34,7 @@ class HoldingsCollection(Resource):
 
 
 @ns.route('/<string:ticker>')
-@api.response(404, 'Product not found.')
+@api.response(404, 'Holdings not found.')
 class HoldingItem(Resource):
     @auth.requires_auth
     @api.marshal_with(holding)
