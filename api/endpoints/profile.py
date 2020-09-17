@@ -2,7 +2,7 @@ import logging
 from flask import request
 from flask_restplus import Resource
 from api.repositories.users_repo import get_user, create_user, upsert_user
-from api.shared.serialisers import user
+from api.repositories.models.serialisers import user
 from api.restplus import api
 from api import auth
 
