@@ -1,8 +1,7 @@
-from api.shared.serialisers import price
 
 
 def calc_movement(increase: float, price: float) -> float:
-    if increase is None or price is None or price is 0:
+    if increase is None or price is None or price == 0:
         return 0
     return (increase / price) * 100
 
