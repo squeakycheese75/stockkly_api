@@ -26,9 +26,10 @@ flake8:
 	flake8 ./api/endpoints
 	flake8 ./api/repositories
 	flake8 ./api/shared
+	flake8 app.py
 
 test-requirements:
-	pip3 install -r requirements/test.txt
+	pip3 install -r ./api/requirements/test.txt
 
 test-unit:
 	pytest --cov=./api/controllers --cov=./api/shared --cov-fail-under 70 --cov-report term-missing --cov-report xml tests/unit/ -v

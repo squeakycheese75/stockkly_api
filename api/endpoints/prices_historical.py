@@ -2,7 +2,7 @@ import logging
 from flask_restplus import Resource
 from api.restplus import api
 import html
-from cache import cache
+from api.cache import cache
 from api.controllers.prices import get_historical
 
 
