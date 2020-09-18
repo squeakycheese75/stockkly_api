@@ -1,6 +1,6 @@
 
 from pytest import mark
-from api.shared.helpers.pricing_helper import calc_movement, calc_change, calc_total, calc_total_change
+from api.shared.helpers.pricing_helper import calc_movement, calc_change, calc_total, calc_total_change, convert_price_list,calculate_asset_balance
 
 
 @mark.parametrize(
@@ -65,3 +65,38 @@ def test_calc_total(holding, price, expected_result):
 def test_calc_total_change(holding, change, expected_result):
     resval = calc_total_change(holding, change)
     assert resval == expected_result
+
+def test_the_convert_price_list_flattens_a_datasource():
+  prices = [
+    {"price": 1.99, "priceDate": '2020-01-31', "ticker": "GOLD:OZ:GBP",},
+    {"price": 1.98, "priceDate": '2020-01-30', "ticker": "GOLD:OZ:GBP",},
+    {"price": 1.97, "priceDate": '2020-01-29', "ticker": "GOLD:OZ:GBP",},
+  ]
+  resval = convert_price_list(prices)
+  assert resval == {'2020-01-31': 1.99, '2020-01-30': 1.98, '2020-01-29': 1.97}
+
+
+def test_calculate_asset_balance():
+  transactions = [
+    {'transtype': 'BUY', 'quantity': 100},
+    {'transtype': 'Sell', 'quantity': 10}
+    ]
+  resval = calculate_asset_balance(transactions, 'BTC:USD', 'test@user')
+  assert resval.get('qty') == 90
+
+
+@mark.parametrize(
+ "transactions,  expected_balance",
+ [([
+    {'transtype': 'BUY', 'quantity': 100},
+    {'transtype': 'Sell', 'quantity': 10}
+  ], 90),
+  ([
+    {'transtype': 'BUY', 'quantity': 100},
+    {'transtype': 'BUY', 'quantity': 10}
+  ], 110),
+  ]
+)
+def test_calculate_asset_balance2(transactions, expected_balance):
+  resval = calculate_asset_balance(transactions, 'BTC:USD', 'test@user')
+  assert resval.get('qty') == expected_balance
