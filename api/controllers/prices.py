@@ -1,8 +1,7 @@
-import pandas as pd
-from json import loads
 import logging
 from api.repositories.products_repo import get_product
 from api.repositories.prices_repo import get_price_trend, get_price_latest
+from api.shared.helpers.pricing_helper import convert_price_list
 
 log = logging.getLogger(__name__)
 
@@ -36,16 +35,3 @@ def clean_price_list(ticker: str, span: int) -> list:
         if type(price_item['price']) is float:
             price_list.append(price_item)
     return price_list
-
-
-def convert_price_list(price_list: list) -> dict:
-    # convert to dataframe and format for the chart
-    df = pd.DataFrame(price_list)
-    df = df.set_index(pd.DatetimeIndex(df['priceDate']).strftime("%Y-%m-%d"))
-    # drop the priceDate column
-    target_column = 'priceDate'
-    resval = df.drop(target_column, axis=1)
-
-    r = resval.to_json(date_format='iso')
-    rv = loads(r)
-    return rv['price']

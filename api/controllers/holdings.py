@@ -1,25 +1,15 @@
 import pandas as pd
 import json
 from api.repositories import balances_repo, products_repo, prices_repo, users_repo, transactions_repo
-from api.shared.helpers.pricing_helper import calc_change, calc_movement, calc_total, calc_total_change
+from api.shared.helpers.pricing_helper import calc_change, calc_movement, calc_total, calc_total_change, calculate_asset_balance
 
 
-def calculate_balance(user_id, ticker):
+def calculate_balance(user_id, ticker) -> dict:
     transactions = transactions_repo.get_transaction_history_for_user_and_product(user_id, ticker)
-    balance = {
-        'ticker': ticker,
-        'userId': user_id,
-        'qty': 0
-    }
-    for item in transactions:
-        if item['transtype'].upper() == "BUY":
-            balance['qty'] += float(item['quantity'])
-        else:
-            balance['qty'] -= float(item['quantity'])
-    return balance
+    return calculate_asset_balance(transactions, ticker, user_id)
 
 
-def enrich_with_price_data(item, user_ccy):
+def enrich_with_price_data(item: dict, user_ccy: str = 'GBP') -> dict:
     ticker = item['ticker']
     # enrich with product data
     product = products_repo.get_product(ticker)
@@ -68,7 +58,6 @@ def enrich_with_price_data(item, user_ccy):
         item['movement'] = 0
         item['total_change'] = 0
         item['total'] = 0
-
     return item
 
 
