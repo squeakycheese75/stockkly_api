@@ -2,6 +2,7 @@
 FLASK_DEBUG = False
 FLASK_HOST = '0.0.0.0'
 FLASK_PORT = '5000'
+FLASK_PRODUCTION_MODE = False
 
 # Flask-Restplus settings
 RESTPLUS_SWAGGER_UI_DOC_EXPANSION = 'list'

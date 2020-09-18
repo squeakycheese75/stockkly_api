@@ -7,6 +7,7 @@ import logging.config
 import settings
 from api.restplus import api
 from api.mongo import mongoDB
+from waitress import serve
 from werkzeug.middleware.proxy_fix import ProxyFix
 from api.endpoints.prices import ns as product_prices_namespace
 from api.endpoints.prices_historical import ns as pricesHistorical_namespace
@@ -53,11 +54,15 @@ def initialize_app(flask_app):
 
 
 def main():
-    log.info('Running in Development Mode')
-    app.run(host=settings.FLASK_HOST,
-            port=settings.FLASK_PORT,
-            debug=settings.FLASK_DEBUG,
-            threaded=True)
+    if(settings.FLASK_PRODUCTION_MODE):
+        log.info('Running in Production Mode')
+        serve(app,  host=settings.FLASK_HOST, port=settings.FLASK_PORT)
+    else:
+        log.info('Running in Development Mode')
+        app.run(host=settings.FLASK_HOST,
+                port=settings.FLASK_PORT,
+                debug=settings.FLASK_DEBUG,
+                threaded=True)
 
 
 initialize_app(app)
