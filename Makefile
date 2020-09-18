@@ -13,15 +13,16 @@ export HELP
 
 create-local-env:
 	echo "MONGO_CONNECTION=mongodb://localhost:27017/stockkly" >> .env
-	echo "AUTH0_DOMAIN=***your autho0 domain crdentials***" >> .env
+	echo "AUTH0_DOMAIN=***your autho0 domain credentials***" >> .env
 	echo "API_IDENTIFIER=***your front end***" >> .env
 	echo "FLASK_APP=stockklyAPI" >> .flaskenv
 	echo "FLASK_ENV=development" >> .flaskenv
 	echo "FLASK_RUN_PORT=5000" >> .flaskenv
 	echo "FLASK_DEBUG=True" >> .flaskenv
 
-dependancies: 
-	pip3 install -r requirements/base.txt 
+base-requirements:
+	pip install --upgrade pip
+	pip install -r ./api/requirements/base.txt
 
 flake8:
 	flake8 ./api/controllers
@@ -31,7 +32,7 @@ flake8:
 	flake8 app.py
 
 test-requirements:
-	pip3 install -r ./api/requirements/test.txt
+	pip install -r ./api/requirements/test.txt
 
 test-unit:
 	pytest --cov=./api/controllers --cov=./api/shared --cov-fail-under 70 --cov-report term-missing --cov-report xml tests/unit/ -v
