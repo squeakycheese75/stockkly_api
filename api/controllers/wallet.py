@@ -1,64 +1,13 @@
 import pandas as pd
 import json
 from api.repositories import balances_repo, products_repo, prices_repo, users_repo, transactions_repo
-from api.shared.helpers.pricing_helper import calc_change, calc_movement, calc_total, calc_total_change, calculate_asset_balance
+from api.shared.helpers.pricing_helper import calculate_asset_balance
+from api.shared.helpers.holdings_helpers import map_product, map_price, map_spot
 
 
 def calculate_balance(user_id, ticker) -> dict:
     transactions = transactions_repo.get_transaction_history_for_user_and_product(user_id, ticker)
     return calculate_asset_balance(transactions, ticker, user_id)
-
-
-def enrich_with_price_data(item: dict, user_ccy: str = 'GBP') -> dict:
-    ticker = item['ticker']
-    # enrich with product data
-    product = products_repo.get_product(ticker)
-    if product:
-        item['name'] = product['name']
-        item['ccy'] = product['quote']['currency']
-        item['symbol'] = product['quote']['symbol']
-        item['displayTicker'] = product['displayTicker']
-    else:
-        item['name'] = 'na'
-        item['ccy'] = 'na'
-        item['symbol'] = 'na'
-        item['displayTicker'] = ticker
-
-    if item['ccy'] == user_ccy:
-        item['spot'] = 1
-    else:
-        spot_ticker = user_ccy + ":" + item['ccy']
-        spot = prices_repo.get_price_latest(spot_ticker)
-        if spot is None:
-            item['spot'] = 1
-        else:
-            item['spot'] = float(spot['price'])
-
-    price_entity = prices_repo.get_price_now(ticker)
-    if not price_entity:
-        price_entity = prices_repo.get_price_latest(ticker)
-
-    price = float(price_entity['price'])
-    price_open = float(price_entity['open'])
-
-    if product['sector'] == 'Fund':
-        previous_price = prices_repo.get_price_previous(ticker, price_entity['priceDate'])
-        price_open = previous_price['price']
-
-    if price:
-        change = calc_change(price, price_open)
-        item['change'] = change
-        item['price'] = price
-        item['movement'] = calc_movement(change, price)
-        item['total_change'] = (calc_total_change(item['qty'], change) / item['spot'])
-        item['total'] = (calc_total(item['qty'], price) / item['spot'])
-    else:
-        item['change'] = 0
-        item['price'] = 0
-        item['movement'] = 0
-        item['total_change'] = 0
-        item['total'] = 0
-    return item
 
 
 def get_holding(user_id, ticker):
@@ -122,3 +71,23 @@ def update_balance(user_id, ticker, qty):
         new_balance = calculate_balance(user_id, ticker)
         response = balances_repo.update_balance(user_id, ticker, new_balance['qty'])
     return response
+
+
+def enrich_with_price_data(item: dict, user_ccy: str = 'GBP') -> dict:
+    ticker = item['ticker']
+    # enrich with product data
+    product = products_repo.get_product(ticker)
+    item = map_product(ticker, item, product)
+    # enrigh with spot
+    spot = None
+    if item['ccy'] != user_ccy:
+        spot = prices_repo.get_price_latest(user_ccy + ":" + item['ccy'])
+    item = map_spot(ticker, item, spot)
+
+    # enrich with prices
+    price_entity = prices_repo.get_price_now(ticker)
+    if not price_entity:
+        price_entity = prices_repo.get_price_latest(ticker)
+
+    item = map_price(item, price_entity)
+    return item

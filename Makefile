@@ -3,9 +3,12 @@ define HELP
 Usage:
 
 make create-local-env           - Create skeleton .env file.
+make base-requirements          - Install base package requirements and pip upgrade.
+test-requirements               - Install test package requirements.
 make dependancies               - Install base dependancies.
 make flake8                     - Run flake8 linting.
 make test-unit                  - Run unit tests.
+make commit                     - Semantic versioning commit.
 
 endef
 
@@ -37,5 +40,5 @@ test-requirements:
 test-unit:
 	pytest --cov=./api/controllers --cov=./api/shared --cov-fail-under 70 --cov-report term-missing --cov-report xml tests/unit/ -v
 
-commit: flake8
+commit: flake8 test-unit
 	cz commit

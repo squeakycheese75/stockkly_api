@@ -10,7 +10,7 @@ from api.cache import cache
 
 log = logging.getLogger(__name__)
 
-ns = api.namespace('wallet', description='Operations related to wallet Holdings')
+ns = api.namespace('wallet', description='Operations related to wallet holdings')
 
 CACHE_PREFIX = 'auth:'
 
