@@ -1,35 +1,37 @@
 from api.shared.helpers.pricing_helper import calc_change, calc_movement, calc_total
 
 
-def build_holding(holding: dict,
-                  product: dict,
-                  price: dict,
-                  spot: dict = {'price': 1},
-                  user_ccy: str = 'GBP') -> dict:
-    ticker = holding['ticker']
-    # enrich with product data
+def map_product(ticker: str, holding: dict, product: dict):
     if product:
         holding['name'] = product['name']
         holding['ccy'] = product['quote']['currency']
         holding['symbol'] = product['quote']['symbol']
         holding['displayTicker'] = product['displayTicker']
     else:
-        holding['name'] = 'na'
-        holding['ccy'] = 'na'
-        holding['symbol'] = 'na'
+        holding['name'] = ticker
+        holding['ccy'] = 'USD'
+        holding['symbol'] = '$'
         holding['displayTicker'] = ticker
-    # enrich with spot
-    holding['spot'] == float(spot['price'])
+    return holding
 
-    # enrich with price
+
+def map_spot(ticker: str, holding: dict, spot: dict):
+    if spot is None or 'price' not in spot:
+        holding['spot'] = 1
+    else:
+        holding['spot'] = float(spot['price'])
+    return holding
+
+
+def map_price(holding: dict, price: dict):
     asset_price = float(price['price'])
     asset_open = float(price['open'])
+    asset_change = calc_change(asset_price, asset_open)
 
     if asset_price:
-        change = calc_change(price, asset_open)
-        holding['change'] = change
-        holding['price'] = price
-        holding['movement'] = calc_movement(change, price)
-        holding['total_change'] = (calc_movement(holding['qty'], change) / holding['spot'])
-        holding['total'] = (calc_total(holding['qty'], price) / holding['spot'])
+        holding['change'] = asset_change
+        holding['price'] = asset_price
+        holding['movement'] = calc_movement(asset_change, asset_price)
+        holding['total_change'] = (holding['qty'] * asset_change / holding['spot'])
+        holding['total'] = (calc_total(holding['qty'], asset_price) / holding['spot'])
     return holding

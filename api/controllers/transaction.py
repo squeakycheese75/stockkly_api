@@ -1,5 +1,5 @@
 from api.repositories import transactions_repo
-from api.controllers.holdings import update_balance
+from api.controllers.wallet import update_balance
 
 
 def create_transaction(data, user_id):
