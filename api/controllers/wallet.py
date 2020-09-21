@@ -10,24 +10,21 @@ def calculate_balance(user_id, ticker) -> dict:
     return calculate_asset_balance(transactions, ticker, user_id)
 
 
-def get_holding(user_id, ticker):
-    resval = balances_repo.get_balance(user_id, ticker)
-    if resval is None:
-        return
-
+def get_holding(user_id, ticker) -> dict:
     user_profile = users_repo.get_user(user_id)
+    balance = balances_repo.get_balance(user_id, ticker)
+    if balance is None:
+        return
+    return enrich_with_price_data(balance, user_profile['currency'])
 
-    resval = enrich_with_price_data(resval, user_profile['currency'])
-    return resval
 
-
-def get_holdings(user_id):
+def get_holdings(user_id) -> list:
     user_profile = users_repo.get_user(user_id)
     query_result = balances_repo.get_balances(user_id)
     if query_result.count() == 0:
-        return "No Results"
-    resval = []
+        return []
 
+    resval = []
     for item in query_result:
         quantity = item['qty']
         if quantity != 0:
@@ -84,7 +81,6 @@ def enrich_with_price_data(item: dict, user_ccy: str = 'GBP') -> dict:
         spot = prices_repo.get_price_latest(user_ccy + ":" + item['ccy'])
     item = map_spot(ticker, item, spot)
 
-    # enrich with prices
     price_entity = prices_repo.get_price_now(ticker)
     if not price_entity:
         price_entity = prices_repo.get_price_latest(ticker)
