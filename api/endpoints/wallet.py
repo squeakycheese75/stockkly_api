@@ -1,7 +1,7 @@
 import logging
 from flask import request
 from flask_restplus import Resource
-from api.controllers.holdings import get_holdings, get_holding, get_holdings_historical
+from api.controllers.wallet import get_holdings, get_holding, get_holdings_historical
 from api.repositories.models.serialisers import holding
 from api.restplus import api
 from api import auth
@@ -10,7 +10,7 @@ from api.cache import cache
 
 log = logging.getLogger(__name__)
 
-ns = api.namespace('wallet', description='Operations related to wallet Holdings')
+ns = api.namespace('wallet', description='Operations related to wallet holdings')
 
 CACHE_PREFIX = 'auth:'
 
