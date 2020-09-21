@@ -84,9 +84,31 @@ def test_enrich_holdings_new(mock_get_product, mock_get_price_now, mock_get_pric
 
 
 @patch("api.controllers.wallet.balances_repo.get_balance")
-def test_get_holding(mock_get_balance):
+@patch("api.controllers.wallet.users_repo.get_user")
+def test_get_holding_return_empty_if_no_balance(mock_get_user, mock_get_balance):
     test_ticker = 'BTC:USD'
     test_user = 'dummyUser'
+
     mock_get_balance.return_value = None
+    mock_get_user = {}
     resval = get_holding(test_user, test_ticker)
     assert resval == None
+
+
+@patch("api.controllers.wallet.balances_repo.get_balance")
+@patch("api.controllers.wallet.users_repo.get_user")
+@patch("api.controllers.wallet.enrich_with_price_data")
+def test_get_holding(mock_enrich_with_price_data, mock_get_user, mock_get_balance):
+    test_ticker = 'BTC:USD'
+    test_user = {'currency': 'GBP'}
+    dummy_result  = {'ticker': test_ticker}
+
+    mock_get_user.return_value = test_user
+    mock_get_balance.return_value = dummy_result
+    mock_enrich_with_price_data.return_value = dummy_result
+
+    resval = get_holding(test_user, test_ticker)
+    mock_enrich_with_price_data.assert_called_once()
+    mock_get_balance.assert_called_once()
+    mock_get_user.assert_called_once()
+    assert resval == dummy_result

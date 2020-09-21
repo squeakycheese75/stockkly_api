@@ -4,7 +4,7 @@ Usage:
 
 make create-local-env           - Create skeleton .env file.
 make base-requirements          - Install base package requirements and pip upgrade.
-test-requirements               - Install test package requirements.
+make test-requirements          - Install test package requirements.
 make dependancies               - Install base dependancies.
 make flake8                     - Run flake8 linting.
 make test-unit                  - Run unit tests.
@@ -24,8 +24,8 @@ create-local-env:
 	echo "FLASK_DEBUG=True" >> .flaskenv
 
 base-requirements:
-	pip install --upgrade pip
-	pip install -r ./api/requirements/base.txt
+	pip3 install --upgrade pip
+	pip3 install -r ./api/requirements/base.txt
 
 flake8:
 	flake8 ./api/controllers
@@ -35,7 +35,7 @@ flake8:
 	flake8 app.py
 
 test-requirements:
-	pip install -r ./api/requirements/test.txt
+	pip3 install -r ./api/requirements/test.txt
 
 test-unit:
 	pytest --cov=./api/controllers --cov=./api/shared --cov-fail-under 70 --cov-report term-missing --cov-report xml tests/unit/ -v
