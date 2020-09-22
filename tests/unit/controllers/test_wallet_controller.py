@@ -92,7 +92,7 @@ def test_get_holding_return_empty_if_no_balance(mock_get_user, mock_get_balance)
     mock_get_balance.return_value = None
     mock_get_user = {}
     resval = get_holding(test_user, test_ticker)
-    assert resval == None
+    assert resval == {}
 
 
 @patch("api.controllers.wallet.balances_repo.get_balance")
