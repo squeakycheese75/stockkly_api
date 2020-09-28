@@ -1,7 +1,7 @@
 from api.shared.helpers.pricing_helper import calc_change, calc_movement, calc_total
 
 
-def map_product(ticker: str, holding: dict, product: dict):
+def map_product(ticker: str, holding: dict, product: dict) -> dict:
     if product:
         holding['name'] = product['name']
         holding['ccy'] = product['quote']['currency']
@@ -15,7 +15,7 @@ def map_product(ticker: str, holding: dict, product: dict):
     return holding
 
 
-def map_spot(ticker: str, holding: dict, spot: dict):
+def map_spot(ticker: str, holding: dict, spot: dict) -> dict:
     if spot is None or 'price' not in spot:
         holding['spot'] = 1
     else:
@@ -23,7 +23,7 @@ def map_spot(ticker: str, holding: dict, spot: dict):
     return holding
 
 
-def map_price(holding: dict, price: dict):
+def map_price(holding: dict, price: dict) -> dict:
     asset_price = float(price['price'])
     asset_open = float(price['open'])
     asset_change = calc_change(asset_price, asset_open)

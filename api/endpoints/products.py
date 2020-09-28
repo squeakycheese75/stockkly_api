@@ -25,7 +25,7 @@ class ProductCollection(Resource):
         if rv is None:
             response = get_products()
             rv = json.loads(response)
-            cache.set('productList', rv, timeout=60 * 60)
+        cache.set('productList', rv, timeout=60 * 60)
         return rv, 200
 
     @api.response(201, 'Product successfully created.')
@@ -53,13 +53,13 @@ class ProductItem(Resource):
         rv = cache.get(cache_key)
         if rv is None:
             rv = get_product(id)
-            cache.set(cache_key, rv, timeout=60 * 60)
+        # cache.set(cache_key, rv, timeout=60 * 60)
         return rv, 200
 
     @api.expect(product)
     def put(self, id):
         """
-        Updates a Produc
+        Updates a Product
         """
         data = request.json
         upsert_product(data, id)
