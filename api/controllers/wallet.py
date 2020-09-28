@@ -14,7 +14,7 @@ def get_holding(user_id, ticker) -> dict:
     user_profile = users_repo.get_user(user_id)
     balance = balances_repo.get_balance(user_id, ticker)
     if balance is None:
-        return {}
+        return None
     return enrich_with_price_data(balance, user_profile['currency'])
 
 
@@ -54,7 +54,7 @@ def get_holdings_historical(user_id):
     return response2
 
 
-def update_balance(user_id, ticker, qty):
+def update_balance(user_id, ticker, qty) -> dict:
     holding = get_holding(user_id, ticker)
     response = ''
     if holding is None:

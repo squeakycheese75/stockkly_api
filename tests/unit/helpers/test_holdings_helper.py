@@ -54,7 +54,7 @@ def test_map_spot_handles_inputs(spot, expected_result):
     resval = map_spot(test_ticker, test_holding, spot)
     assert resval['ticker'] == 'BTC:USD'
     assert resval['spot'] == expected_result
-
+    
 
 def test_map_price():
     test_ticker = 'BTC:USD'

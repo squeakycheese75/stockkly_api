@@ -1,5 +1,5 @@
 # Flask settings
-FLASK_DEBUG = False
+FLASK_DEBUG = True
 FLASK_HOST = '0.0.0.0'
 FLASK_PORT = '5000'
 FLASK_PRODUCTION_MODE = False
