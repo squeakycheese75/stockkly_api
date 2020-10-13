@@ -10,7 +10,7 @@ log = logging.getLogger(__name__)
 
 ns = api.namespace('prices', description='Operations related to Prices')
 
-CACHE_PREFIX = 'historicalPrices:'
+CACHE_PREFIX = 'prices:'
 
 
 @ns.route('/<string:ticker>')

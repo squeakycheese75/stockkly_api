@@ -1,6 +1,7 @@
 import logging
 from flask_restplus import Resource
 from api.restplus import api
+import json
 import html
 from api.cache import cache
 from api.controllers.prices import get_historical
@@ -9,7 +10,6 @@ from api.controllers.prices import get_historical
 log = logging.getLogger(__name__)
 
 ns = api.namespace('pricesHistorical', description='Operations related to Historical Prices')
-
 
 CACHE_PREFIX = 'historicalPrices:'
 
@@ -28,4 +28,4 @@ class HistoricalPrices(Resource):
             response = get_historical(unec_ticker, 90)
             cache.set(cache_key, rv, timeout=60 * 60)
             rv = response
-        return rv, 200
+        return json.loads(rv), 200
