@@ -14,7 +14,7 @@ def get_historical(ticker, span) -> list:
         converted_price_list = convert_price_list(price_list)
         return converted_price_list
     except (KeyError, TypeError, ValueError, AttributeError) as error_ee:
-        log.error("Could not connect extract historical prices: %s" % error_ee)
+        log.error("Could not connect extract historical prices: %s", error_ee)
         return []
 
 
@@ -32,6 +32,6 @@ def clean_price_list(ticker: str, span: int) -> list:
 
     price_list = []
     for price_item in price_history:
-        if type(price_item['price']) is float:
+        if isinstance(price_item['price'], float):
             price_list.append(price_item)
     return price_list

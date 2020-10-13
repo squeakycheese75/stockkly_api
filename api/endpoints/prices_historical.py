@@ -25,7 +25,7 @@ class HistoricalPrices(Resource):
         cache_key = CACHE_PREFIX + unec_ticker
         rv = cache.get(cache_key)
         if rv is None:
-            response = get_historical(unec_ticker, 90)
+            response = get_historical(unec_ticker, 120)
             cache.set(cache_key, rv, timeout=60 * 60)
             rv = response
         return json.loads(rv), 200
