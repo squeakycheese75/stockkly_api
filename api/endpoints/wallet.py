@@ -63,5 +63,19 @@ class HistoricalHoldings(Resource):
             user_info = auth.get_userinfo_with_token()
             rv = user_info['email']
             cache.set(cache_key, rv, timeout=60 * 50)
-        response = get_holdings_historical("test")
+        response = get_holdings_historical()
         return response, 200
+
+
+# @auth.requires_auth
+# @ns.route('/historical/<string:ticker>')
+# class HistoricalHolding(Resource):
+#     def get(self, ticker):
+#         cache_key = CACHE_PREFIX + request.headers.get("Authorization", None)
+#         rv = cache.get(cache_key)
+#         if rv is None:
+#             user_info = auth.get_userinfo_with_token()
+#             rv = user_info['email']
+#             cache.set(cache_key, rv, timeout=60 * 50)
+#             response = get_historical_holding(ticker)
+#         return response, 200

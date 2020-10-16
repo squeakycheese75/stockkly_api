@@ -42,8 +42,7 @@ def lookup_price(ticker: str) -> (dict, bool):
     return price, is_stale
 
 
-def build_price_trend(ticker: str, 
-                      days: int) -> list:
+def build_price_trend(ticker: str, days: int) -> list:
     price_trend = list(get_price_trend(ticker, days))
     revered_price_list = []
     for price in price_trend:
