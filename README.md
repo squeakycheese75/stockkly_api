@@ -37,8 +37,8 @@ These can be constructed via the docker-compose in the dependancies folder:
 
 You can build the API and host via a docker container, either locate the image on DockerHub or run
 
-1. docker build -t stockkly_api .    
-2. docker run -d --name stockkly_api -p 5000:5000 stockkly_api
+1. ```docker build -t stockkly_api . ``` 
+2. ```docker run -d --name stockkly_api -p 5000:5000 stockkly_api```
 
 
 ## Getting Started
@@ -49,5 +49,5 @@ You can build the API and host via a docker container, either locate the image o
 
 ## Disclaimer
 
-StockkyAPI is an open source project for collating and provide data from various sources, despite best attempts data provided is not be suitable 
-for making decisions and should be considered as test.  Stockkly also does not gurantee that the data is live. 
+StockkyAPI is an open source project for collating and providing data from various sources.  Despite best attempts, data provided is not be suitable 
+for decison making and should be considered as test.  Stockkly also does not gurantee that the data is live.   Price delays are in some cases 15 mins.

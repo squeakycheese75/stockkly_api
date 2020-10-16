@@ -28,7 +28,7 @@ def get_ticker(ticker: str) -> dict:
             "isStalePrice": is_stale
         }
     except (KeyError) as error_key:
-        log.error("KeyError found when building watchlist: %s" % error_key)
+        log.error("KeyError found when building watchlist: %s", error_key)
         return {}
     return response
 
@@ -45,8 +45,8 @@ def lookup_price(ticker: str) -> (dict, bool):
 def build_price_trend(ticker: str, days: int) -> list:
     price_trend = list(get_price_trend(ticker, days))
     revered_price_list = []
-    for x in price_trend:
+    for price in price_trend:
         # I polluted the data with strings.  This is to filter them out.
-        if type(x['price']) is float:
-            revered_price_list.append(x['price'])
+        if type(price['price']) is float:
+            revered_price_list.append(price['price'])
     return list(reversed(revered_price_list))

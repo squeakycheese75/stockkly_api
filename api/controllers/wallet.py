@@ -1,5 +1,5 @@
-import pandas as pd
 import json
+import pandas as pd
 from api.repositories import balances_repo, products_repo, prices_repo, users_repo, transactions_repo
 from api.shared.helpers.pricing_helper import calculate_asset_balance
 from api.shared.helpers.holdings_helpers import map_product, map_price, map_spot
@@ -32,8 +32,8 @@ def get_holdings(user_id) -> list:
     return resval
 
 
-def get_holdings_historical(user_id):
-    df = pd.DataFrame(columns=["balance", "balanceDate"], data=[
+def get_holdings_historical():
+    data_frame = pd.DataFrame(columns=["balance", "balanceDate"], data=[
         [10000.00, '2019-11-01'],
         [9000.00, '2019-10-01'],
         [11000.99, '2019-09-01'],
@@ -46,8 +46,8 @@ def get_holdings_historical(user_id):
         [7999.99, '2019-02-01'],
         [9779.99, '2019-01-01']
     ])
-    df = df.set_index(pd.DatetimeIndex(df['balanceDate']).strftime("%Y-%m-%d"))
-    resval = df.drop('balanceDate', axis=1)
+    data_frame = data_frame.set_index(pd.DatetimeIndex(data_frame['balanceDate']).strftime("%Y-%m-%d"))
+    resval = data_frame.drop('balanceDate', axis=1)
     response = resval.to_json(date_format='iso')
     rv = json.loads(response)
     response2 = rv['balance']

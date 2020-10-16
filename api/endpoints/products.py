@@ -2,9 +2,10 @@ import logging
 import json
 from flask import request
 from flask_restplus import Resource
-from api.repositories.products_repo import upsert_product, get_products, create_product, get_product
+from api.repositories.products_repo import upsert_product, get_products, create_product, get_product, get_sectors
 from api.repositories.models.serialisers import product
 from api.restplus import api
+from api import auth
 from api.cache import cache
 
 log = logging.getLogger(__name__)
@@ -15,6 +16,7 @@ CACHE_PREFIX = 'product:'
 
 
 @ns.route('/')
+@api.response(404, 'Products not found.')
 class ProductCollection(Resource):
     @api.marshal_list_with(product)
     def get(self):
@@ -30,7 +32,7 @@ class ProductCollection(Resource):
 
     @api.response(201, 'Product successfully created.')
     @api.expect(product)
-    # @auth.requires_auth
+    @auth.requires_auth
     def post(self):
         """
         Creates a new Product
@@ -53,10 +55,11 @@ class ProductItem(Resource):
         rv = cache.get(cache_key)
         if rv is None:
             rv = get_product(id)
-        # cache.set(cache_key, rv, timeout=60 * 60)
+        cache.set(cache_key, rv, timeout=60 * 60)
         return rv, 200
 
     @api.expect(product)
+    @auth.requires_auth
     def put(self, id):
         """
         Updates a Product
@@ -64,3 +67,17 @@ class ProductItem(Resource):
         data = request.json
         upsert_product(data, id)
         return None, 204
+
+
+@ns.route('/sectors')
+@api.response(404, 'Product sectors not found.')
+class SectorCollection(Resource):
+    def get(self):
+        """
+        Returns a list of available price sectors.
+        """
+        rv = cache.get('sectorsList')
+        if rv is None:
+            rv = get_sectors()
+            cache.set('sectorsList', rv, timeout=5 * 60)
+        return rv, 200

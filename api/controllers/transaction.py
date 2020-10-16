@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+"""The transactions controllerN"""
+
 from api.repositories import transactions_repo
 from api.controllers.wallet import update_balance
 
