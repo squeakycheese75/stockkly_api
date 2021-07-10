@@ -8,3 +8,4 @@ responses~=0.10.6
 flake8~=3.8.3
 commitizen~=2.3.1
 pylint~=2.6.0
+networkx>=2.6 # not directly required, pinned by Snyk to avoid a vulnerability
